@@ -179,7 +179,7 @@ const DX = {
   prerenal:{name:'腎前性',intro:0,card:'腎臟本身沒壞，是「進去的血不夠」：脫水、出血、休克、心衰竭、腎動脈狹窄。GFR 下降，腎小管仍努力回收鈉和水，所以尿少而濃。'},
   intrinsic:{name:'腎因性',intro:0,card:'腎實質受損：腎小管（ATN）、腎絲球（腎絲球腎炎）、間質（間質性腎炎）、血管（血管炎、血栓）。腎前性拖太久也會變成腎因性。'},
   postrenal:{name:'腎後性',intro:0,card:'尿流不出去：雙側輸尿管或膀胱出口阻塞（只有單側阻塞時，另一顆腎通常撐得住）。腎臟超音波看有沒有水腎。'},
-  pe:{name:'子癲前症',intro:1,card:'懷孕 20 週後新出現高血壓，合併蛋白尿或器官受損。胎盤釋放的 sFlt-1 上升、PlGF 下降；sFlt-1/PlGF 比值 ≤38 可用來排除短期內發生子癲前症。'},
+  pe:{name:'子癲前症',intro:1,card:'懷孕 20 週後新出現高血壓，合併蛋白尿或器官受損。胎盤釋放的 sFlt-1 上升、PlGF 下降。'},
   gn:{name:'腎絲球腎炎',intro:1,card:'腎絲球過濾膜受損：蛋白尿（泡泡尿）、血尿、水腫、高血壓。例如 IgA 腎病、狼瘡腎炎。懷孕可能讓原本穩定的疾病變得不穩定。'},
   sle:{name:'紅斑性狼瘡（SLE）',intro:2,card:'自體免疫疾病，可侵犯腎、血液、皮膚、關節、神經等多個器官。年輕女性多見，懷孕可能誘發發作；嚴重時可合併血栓性微血管病變。檢查 ANA、anti-dsDNA、C3/C4。'},
   aps:{name:'抗磷脂質症候群（APS）',intro:2,card:'抗磷脂抗體讓血液容易凝固：動靜脈血栓、反覆流產、子癲前症。少數會在短時間內多器官同時栓塞（catastrophic APS）。檢查 anticardiolipin、β2-glycoprotein I 抗體。'},
@@ -504,8 +504,8 @@ function renderTA(){
       const pct=Math.round((a.n?frac:(ta?.6:0))*70);
       const keyed = ph==='reveal' && u.key && !sec.assoc;
       const cls=['u']; if(ta) cls.push('ta'); if(keyed) cls.push('key');
-      const showA = sec.assoc && (ph==='reveal' || (ph==='ask' && shown.has(u.id)));
-      return `<button class="${cls.join(' ')}" data-act="${ph==='ask'?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c?`<span class="cnt">${c}</span>`:''}${keyed?'<span class="tag">教案</span>':''}${showA?assocHTML(u):''}${figHTML(u)}</button>`;
+      const showA = sec.assoc && (ph==='reveal' || ((ph==='ask'||ph==='ddx') && shown.has(u.id)));
+      return `<button class="${cls.join(' ')}" data-act="${(ph==='ask'||(sec.assoc&&ph==='ddx'))?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c?`<span class="cnt">${c}</span>`:''}${keyed?'<span class="tag">教案</span>':''}${showA?assocHTML(u):''}${figHTML(u)}</button>`;
     }));
     body = `<p class="prompt">${prompt}</p>${body}`;
   }
@@ -581,7 +581,10 @@ function renderST(){
       if(ph==='reveal' && !clued) cls+= u.key && !sec.assoc ? ' key' : '';
       else if(ph==='reveal') cls+= u.key ? (p?' hit':' miss') : (p?' extra':'');
       else if(p) cls+=' pick';
-      return `<button class="${cls}" data-act="pick" data-u="${u.id}" ${ph==='clue'?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${sec.assoc&&ph==='reveal'?assocHTML(u):''}${figHTML(u)}</button>`;
+      const sh=(S.shown[sec.id]||new Set()).has(u.id);
+      const act = (sec.assoc && ph==='ddx') ? 'reveal1' : (ph==='clue'||(sec.assoc&&ph==='ask')) ? 'pick' : 'pick';
+      const live = ph==='clue' || (sec.assoc && (ph==='ask'||ph==='ddx'));
+      return `<button class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${figHTML(u)}</button>`;
     }));
   }
   if(ph==='ddx' || (ph==='reveal' && sec.units)){
@@ -665,7 +668,7 @@ document.getElementById('app').addEventListener('click', e=>{
   else if(act==='showall'){ const m=S.shown[sec.id]; S.shown[sec.id] = m&&m.size ? new Set() : new Set(sec.units.map(u=>u.id)); render(); }
   else if(act==='mark'){ const m=S.taMarks[sec.id]=S.taMarks[sec.id]||new Set(); m.has(b.dataset.u)?m.delete(b.dataset.u):m.add(b.dataset.u); render(); }
   else if(act==='pick'){
-    if(S.live.phase!=='clue') return;
+    if(S.live.phase!=='clue' && !(sec.assoc && S.live.phase==='ask')) return;
     const arr=new Set(S.mine.picks[sec.id]||[]); arr.has(b.dataset.u)?arr.delete(b.dataset.u):arr.add(b.dataset.u);
     S.mine.picks[sec.id]=[...arr]; saveMine(); render(); if(!S.preview) pushPresence();
   }
