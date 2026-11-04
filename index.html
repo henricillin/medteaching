@@ -298,7 +298,9 @@ const SECTIONS = [
     {id:'e13',t:'四肢溫暖，無發紺'},
     {id:'e14',t:'四肢可見許多瘀點（petechiae）',key:1}],
   cards:[
-    {t:'瘀點＋蒼白＋黃疸',src:'s',b:'瘀點：血小板低下。結膜蒼白：貧血。鞏膜黃疸：紅血球大量破壞、間接膽紅素上升。三者合起來指向<b>溶血＋血小板消耗</b>。'}],
+    {t:'瘀點＋蒼白＋黃疸',src:'s',b:'瘀點：血小板低下。結膜蒼白：貧血。鞏膜黃疸：紅血球大量破壞、間接膽紅素上升。三者合起來指向<b>溶血＋血小板消耗</b>。'},
+    {t:'心衰竭的表現',src:'s',b:'<b>充血</b>：頸靜脈怒張、雙下肢水腫、端坐呼吸（躺下更喘）、肝腫大。<b>輸出不足</b>：心跳快、頭暈、四肢冰冷。本例：頸靜脈怒張、雙下肢嚴重水腫、躺下更喘、HR 118；但四肢溫暖、血壓 176/110，不是休克。'},
+    {t:'肺水腫的表現',src:'s',b:'肺泡積水：呼吸快（RR 22）、血氧低（SpO₂ 88%）、兩側<b>濕囉音（crackles）</b>、咳嗽、躺下更喘；CXR 可見雙側浸潤與心臟肥大。本例：SpO₂ 88%（room air）、RR 22、兩側濕囉音。'}],
   verdict:{
     prerenal:{s:'down',src:'t',why:'血壓 176/110，排除休克。'},
     ttp:{s:'up',src:'t',why:'瘀點＝血小板低下，是血栓性微血管病變的表現之一；蒼白＋黃疸＝溶血性貧血加重。'},
@@ -422,8 +424,8 @@ const TREE = [
   {d:'prerenal'},
   {d:'intrinsic', subs:[
     {label:'腎絲球', ds:['gn']},
-    {label:'血管（血栓性微血管病變・微血栓）', ds:['pe','hellp','ttp','ahus','stechus','aps','sle','dic']},
-    {label:'腎小管・其他', ds:['aflp','aiha']}]},
+    {label:'血管・溶血（血栓性微血管病變・微血栓）', ds:['pe','hellp','ttp','ahus','stechus','aps','sle','dic','aiha']},
+    {label:'腎小管・其他', ds:['aflp']}]},
   {d:'postrenal'}];
 const RANK = {lead:0, up:1, open:2, keep:2, down:3, out:4};
 const ORDER = Object.keys(DX);
