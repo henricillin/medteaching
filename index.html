@@ -281,22 +281,22 @@ const SECTIONS = [
   <li>頭暈：已規律服用 B 群、葉酸、鐵劑，也沒有腸胃道出血證據 → 考慮<b>溶血性貧血加重</b>。視力模糊 → 除了腎、心臟、腸胃，<b>腦神經與眼睛</b>可能也被影響。</li>
   <li>重點：年輕孕婦 26 週出現<b>急性腎衰竭＋心臟衰竭</b>，可能合併呼吸衰竭，神經、腸胃、視力也受影響。若不是子癲前症，重要鑑別有：SLE、APS、TTP、HELLP、AFLP。</li></ol>`},
 
-{ id:'pe', no:'(3)', title:'身體檢查', layout:'list', phases:['want','clue','ddx','reveal'], want:['你會做哪些身體檢查？','先看哪些生命徵象？每項是想確認什麼？'],
+{ id:'pe', no:'(3)', title:'身體檢查', layout:'list', abn:1, phases:['want','clue','ddx','reveal'], want:['你會做哪些身體檢查？','先看哪些生命徵象？每項是想確認什麼？'],
   units:[
     {id:'e1',t:'神智清醒'},
     {id:'e2',t:'BT 36.7 ℃'},
-    {id:'e3',t:'SpO₂ 88%（room air）',key:1},
-    {id:'e4',t:'BP 176/110 mmHg',key:1},
-    {id:'e5',t:'HR 118/min'},
-    {id:'e6',t:'RR 22/min',key:1},
-    {id:'e7',t:'結膜蒼白、鞏膜黃疸（pale conjunctiva, icteric eye）',key:1},
-    {id:'e8',t:'頸靜脈怒張',key:1},
-    {id:'e9',t:'兩側呼吸音皆為濕囉音',key:1},
+    {id:'e3',ab:1,t:'SpO₂ 88%（room air）',key:1},
+    {id:'e4',ab:1,t:'BP 176/110 mmHg',key:1},
+    {id:'e5',ab:1,t:'HR 118/min'},
+    {id:'e6',ab:1,t:'RR 22/min',key:1},
+    {id:'e7',ab:1,t:'結膜蒼白、鞏膜黃疸（pale conjunctiva, icteric eye）',key:1},
+    {id:'e8',ab:1,t:'頸靜脈怒張',key:1},
+    {id:'e9',ab:1,t:'兩側呼吸音皆為濕囉音',key:1},
     {id:'e10',t:'心音正常'},
     {id:'e11',t:'腹部無壓痛，肝脾未觸及'},
-    {id:'e12',t:'雙下肢嚴重水腫'},
+    {id:'e12',ab:1,t:'雙下肢嚴重水腫'},
     {id:'e13',t:'四肢溫暖，無發紺'},
-    {id:'e14',t:'四肢可見許多瘀點（petechiae）',key:1}],
+    {id:'e14',ab:1,t:'四肢可見許多瘀點（petechiae）',key:1}],
   cards:[
     {t:'瘀點＋蒼白＋黃疸',src:'s',b:'瘀點：血小板低下。結膜蒼白：貧血。鞏膜黃疸：紅血球大量破壞、間接膽紅素上升。三者合起來指向<b>溶血＋血小板消耗</b>。'},
     {t:'心衰竭的表現',src:'s',b:'<b>充血</b>：頸靜脈怒張、雙下肢水腫、端坐呼吸（躺下更喘）、肝腫大。<b>輸出不足</b>：心跳快、頭暈、四肢冰冷。本例：頸靜脈怒張、雙下肢嚴重水腫、躺下更喘、HR 118；但四肢溫暖、血壓 176/110，不是休克。'},
@@ -313,26 +313,26 @@ const SECTIONS = [
   <li>四肢許多瘀點 → 已出現<b>血小板低下</b>，是血栓性微血管病變的表現之一；結膜蒼白＋黃疸代表<b>溶血性貧血加重</b>。</li></ol>
   <p>病況不穩定，考慮的鑑別診斷都會危及生命，要盡快抽血與影像檢查。</p>`},
 
-{ id:'lab', no:'(4)', title:'實驗室數據', layout:'list', data:1, phases:['want','clue','ddx','reveal'], want:['你會先抽哪些血、驗哪些項目？','每一項是想排除或支持哪個診斷？'],
+{ id:'lab', no:'(4)', title:'實驗室數據', layout:'list', data:1, abn:1, phases:['want','clue','ddx','reveal'], want:['你會先抽哪些血、驗哪些項目？','每一項是想排除或支持哪個診斷？'],
   units:[
-    {id:'l1',g:'腎功能・電解質・酸鹼',t:'BUN 223 mg/dL',key:1},
-    {id:'l2',t:'Cr 15.92 mg/dL',key:1},
+    {id:'l1',ab:1,g:'腎功能・電解質・酸鹼',t:'BUN 223 mg/dL',key:1},
+    {id:'l2',ab:1,t:'Cr 15.92 mg/dL',key:1},
     {id:'l3',t:'K 3.7 mEq/L'},
-    {id:'l4',t:'ABG pH 7.10・pCO₂ 29 mmHg・HCO₃⁻ 9.0 mmol/L',key:1},
+    {id:'l4',ab:1,t:'ABG pH 7.10・pCO₂ 29 mmHg・HCO₃⁻ 9.0 mmol/L',key:1},
     {id:'l5',t:'Lactate 13.1 mg/dL'},
-    {id:'l6',g:'溶血・血液',t:'Hb 4.5 g/dL',key:1},
-    {id:'l7',t:'Platelet 103 K/µL',key:1},
-    {id:'l8',t:'LDH 2136 U/L',key:1},
-    {id:'l9',t:'Haptoglobin < 5.83 mg/dL',key:1},
-    {id:'l10',t:'T-bil 2.7 / D-bil 0.3 mg/dL',key:1},
-    {id:'l11',t:'Blood smear: fragmented RBC 3+',key:1},
+    {id:'l6',ab:1,g:'溶血・血液',t:'Hb 4.5 g/dL',key:1},
+    {id:'l7',ab:1,t:'Platelet 103 K/µL',key:1},
+    {id:'l8',ab:1,t:'LDH 2136 U/L',key:1},
+    {id:'l9',ab:1,t:'Haptoglobin < 5.83 mg/dL',key:1},
+    {id:'l10',ab:1,t:'T-bil 2.7 / D-bil 0.3 mg/dL',key:1},
+    {id:'l11',ab:1,t:'Blood smear: fragmented RBC 3+',key:1},
     {id:'l12',t:'Direct & indirect Coombs test: negative',key:1},
     {id:'l13',t:'PT / APTT: normal',key:1},
     {id:'l14',t:'ADAMTS13 activity 80%',key:1},
     {id:'l15',g:'其他',t:'GPT 15 IU/L',key:1},
     {id:'l16',t:'Albumin 3.5 g/dL'},
     {id:'l17',t:'CRP 0.5'},
-    {id:'l18',t:'Troponin I 1.3 → 5.66 ng/mL',key:1},
+    {id:'l18',ab:1,t:'Troponin I 1.3 → 5.66 ng/mL',key:1},
     {id:'l19',t:'Stool Shiga toxin: negative',key:1},
     {id:'l20',t:'Stool O157:H7: negative',key:1}],
   cards:[
@@ -499,15 +499,15 @@ function renderTA(){
   let body=statementHTML(sec, ph);
   if(sec.units && ph!=='want'){
     const shown=S.shown[sec.id]||new Set();
-    const prompt = ph==='ask' ? `逐項問大家：${sec.askHint||'這讓你聯想到什麼？'}點一項，顯示教案的聯想。<button class="btn" data-act="showall" style="margin-left:8px">${shown.size?'全部收起':'全部顯示'}</button>` : ph==='clue' ? `請大家點出關鍵線索。${S.roomOk?'越多人點，底色越深。':''}點畫面上的句子可以由助教直接標記。`
-                 : ph==='ddx' ? (phasesOf(i).includes('clue') ? '線索找完了：' : '看完這段，') + '請大家調整右側每個診斷的可能性。' : '框線＝教案推理用到的線索。';
+    const prompt = ph==='ask' ? `逐項問大家：${sec.askHint||'這讓你聯想到什麼？'}點一項，顯示教案的聯想。<button class="btn" data-act="showall" style="margin-left:8px">${shown.size?'全部收起':'全部顯示'}</button>` : ph==='clue' ? `${sec.abn?'請大家點出異常的項目。':'請大家點出關鍵線索。'}${S.roomOk?'越多人點，底色越深。':''}點畫面上的句子可以由助教直接標記。`
+                 : ph==='ddx' ? (phasesOf(i).includes('clue') ? '線索找完了：' : '看完這段，') + '請大家調整右側每個診斷的可能性。' : (sec.abn?'框線＝異常項目；標「關鍵」＝教案推理用到。':'框線＝教案推理用到的線索。');
     body = unitsWrap(sec, eachUnit(sec, u=>{
       const c=a.clue[u.id]||0, frac=a.n?c/a.n:0, ta=marks.has(u.id);
       const pct=Math.round((a.n?frac:(ta?.6:0))*70);
-      const keyed = ph==='reveal' && u.key && !sec.assoc;
+      const keyed = ph==='reveal' && (sec.abn ? u.ab : (u.key && !sec.assoc));
       const cls=['u']; if(ta) cls.push('ta'); if(keyed) cls.push('key');
       const showA = sec.assoc && (ph==='reveal' || ((ph==='ask'||ph==='ddx') && shown.has(u.id)));
-      return `<button class="${cls.join(' ')}" data-act="${(ph==='ask'||(sec.assoc&&ph==='ddx'))?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c?`<span class="cnt">${c}</span>`:''}${keyed?'<span class="tag">教案</span>':''}${showA?assocHTML(u):''}${figHTML(u)}</button>`;
+      return `<button class="${cls.join(' ')}" data-act="${(ph==='ask'||(sec.assoc&&ph==='ddx'))?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c?`<span class="cnt">${c}</span>`:''}${keyed?`<span class="tag">${sec.abn?(u.key?'異常・關鍵':'異常'):'教案'}</span>`:(sec.abn&&ph==='reveal'&&u.key?'<span class="tag">關鍵</span>':'')}${showA?assocHTML(u):''}${figHTML(u)}</button>`;
     }));
     body = `<p class="prompt">${prompt}</p>${body}`;
   }
@@ -575,18 +575,19 @@ function renderST(){
   const picks=new Set(S.mine.picks[sec.id]||[]), votes=S.mine.votes[sec.id]||{};
   let body=statementHTML(sec, ph);
   if(sec.units && ph!=='want'){
-    const hits=sec.units.filter(u=>u.key&&picks.has(u.id)).length, keys=sec.units.filter(u=>u.key).length;
+    const F=sec.abn?'ab':'key';
+    const hits=sec.units.filter(u=>u[F]&&picks.has(u.id)).length, keys=sec.units.filter(u=>u[F]).length;
     const clued=phasesOf(i).includes('clue');
-    if(ph==='reveal' && clued) body+=`<p class="score">你點了 <b>${picks.size}</b> 句，其中 <b>${hits}</b> 句是教案用到的關鍵（共 ${keys} 句）。實線框＝你點中的關鍵，虛線框＝漏掉的關鍵。</p>`;
+    if(ph==='reveal' && clued) body+= sec.abn ? `<p class="score">你點了 <b>${picks.size}</b> 項，其中 <b>${hits}</b> 項是異常（共 ${keys} 項）。實線框＝你點中的異常，虛線框＝漏掉的異常，淡橘＝點了但其實正常。教案推理用到的項目標「關鍵」。</p>` : `<p class="score">你點了 <b>${picks.size}</b> 句，其中 <b>${hits}</b> 句是教案用到的關鍵（共 ${keys} 句）。實線框＝你點中的關鍵，虛線框＝漏掉的關鍵。</p>`;
     body += unitsWrap(sec, eachUnit(sec, u=>{
       const p=picks.has(u.id); let cls='u';
       if(ph==='reveal' && !clued) cls+= u.key && !sec.assoc ? ' key' : '';
-      else if(ph==='reveal') cls+= u.key ? (p?' hit':' miss') : (p?' extra':'');
+      else if(ph==='reveal') cls+= u[F] ? (p?' hit':' miss') : (p?' extra':'');
       else if(p) cls+=' pick';
       const sh=(S.shown[sec.id]||new Set()).has(u.id);
       const act = (sec.assoc && ph==='ddx') ? 'reveal1' : (ph==='clue'||(sec.assoc&&ph==='ask')) ? 'pick' : 'pick';
       const live = ph==='clue' || (sec.assoc && (ph==='ask'||ph==='ddx'));
-      return `<button class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${figHTML(u)}</button>`;
+      return `<button class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${sec.abn&&ph==='reveal'&&u.key?'<span class="tag">關鍵</span>':''}${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${figHTML(u)}</button>`;
     }));
   }
   if(ph==='ddx' || (ph==='reveal' && sec.units)){
@@ -612,7 +613,7 @@ function renderST(){
     <section class="sheet">
       <span class="phase-tag">${PH[ph]}</span>
       <div class="sec-head"><span class="sec-no">${esc(sec.no)}</span><h1 class="sec-title">${esc(sec.title)}</h1></div>
-      <p class="prompt">${esc(ph==='ask'&&sec.askHint?sec.askHint:PH_HINT[ph])}</p>
+      <p class="prompt">${esc(ph==='ask'&&sec.askHint?sec.askHint:(ph==='clue'&&sec.abn?'點出你覺得異常的項目（可複選）':PH_HINT[ph]))}</p>
       ${body}
       ${nav}
     </section>
