@@ -687,10 +687,10 @@ document.addEventListener('keydown', e=>{
 function showLogin(auth){
   const el=document.getElementById('login'); el.hidden=false;
   el.style.cssText='position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px';
-  el.innerHTML='<form style="background:var(--sheet);color:var(--ink);border-radius:12px;padding:20px;max-width:360px;width:100%;display:grid;gap:10px"><b>老師登入</b><input id="lg-e" type="email" placeholder="Email" autocomplete="username" style="font:inherit;padding:8px"><input id="lg-p" type="password" placeholder="密碼" autocomplete="current-password" style="font:inherit;padding:8px"><div id="lg-m" style="color:var(--bad);font-size:13px"></div><div style="display:flex;gap:8px"><button class="btn primary" type="submit">登入</button><button class="btn" type="button" id="lg-c">取消</button></div></form>';
+  el.innerHTML='<form style="background:var(--sheet);color:var(--ink);border-radius:12px;padding:20px;max-width:360px;width:100%;display:grid;gap:10px"><b>老師登入</b><input id="lg-e" type="text" placeholder="代號或 Email" autocomplete="username" autocapitalize="off" style="font:inherit;padding:8px"><input id="lg-p" type="password" placeholder="密碼" autocomplete="current-password" style="font:inherit;padding:8px"><div id="lg-m" style="color:var(--bad);font-size:13px"></div><div style="display:flex;gap:8px"><button class="btn primary" type="submit">登入</button><button class="btn" type="button" id="lg-c">取消</button></div></form>';
   el.querySelector('#lg-c').onclick=()=>{ el.hidden=true; location.hash=''; };
   el.querySelector('form').onsubmit=async ev=>{ ev.preventDefault();
-    try{ await auth.signInWithEmailAndPassword(el.querySelector('#lg-e').value.trim(), el.querySelector('#lg-p').value); location.hash=''; location.reload(); }
+    try{ await auth.signInWithEmailAndPassword(((v)=>/^\d+$/.test(v)?v+'@medteaching-e190d.web.app':v)(el.querySelector('#lg-e').value.trim()), el.querySelector('#lg-p').value); location.hash=''; location.reload(); }
     catch(e){ el.querySelector('#lg-m').textContent='登入失敗（'+(e.code||'錯誤')+'）'; } };
 }
 async function init(){
