@@ -3,16 +3,16 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Chiron+Hei+HK:wght@400;500;700&display=swap">
 <style>
 /* Layout: projector = case sheet (left) + differential board (right); phone = one column that follows the TA. Heat = amber, like concentrated urine. */
 :root{
   --paper:#EEF1F4; --sheet:#FFFFFF; --ink:#18212F; --muted:#5A6576; --rule:#D5DBE3;
   --heat:#E3A008; --heat-ink:#6E4A00; --key:#3A3FB4; --key-soft:#E6E7FA;
   --up:#C2410C; --down:#46698C; --out:#8A93A0; --lead:#0F766E; --good:#15803D; --bad:#B91C1C;
-  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
-  --f-display:"Noto Serif TC","Songti TC","PMingLiU",serif;
-  --f-data:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --f-body:"Inter","Chiron Hei HK","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-display:"Newsreader","Chiron Hei HK","PingFang TC","Microsoft JhengHei",serif;
+  --f-data:"JetBrains Mono","Chiron Hei HK",ui-monospace,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#0F141B; --sheet:#171E28; --ink:#E5E9EF; --muted:#9AA5B4; --rule:#2A3442;
@@ -518,7 +518,7 @@ function renderTA(){
   const nextLabel = (()=>{ const ps=phasesOf(i), k=ps.indexOf(ph); if(k<ps.length-1) return PH[ps[k+1]]+' →'; return i<SECTIONS.length-1?'下一段 →':''; })();
   return `
   <header class="bar">
-    <span class="brand">寡尿 · 臨床推理<small>陳怡儒醫師教案</small></span>
+    <span class="brand">寡尿 · 臨床推理<small>陳怡儒醫師教案</small></span><button class="btn" data-act="talogin" style="margin-left:8px">切換 TA</button>
     <nav class="steps">${steps}</nav>
     <span class="seg">${segs}</span>
     <span class="spacer"></span>
@@ -608,7 +608,7 @@ function renderST(){
   const nav = S.follow ? '' : `<div class="selfnav"><button class="btn" data-act="prev">← 上一步</button><button class="btn primary" data-act="next">下一步 →</button></div>`;
   const status = S.follow ? `<span class="pill"><span class="dot ok"></span>跟著助教進度</span>` : `<span class="pill"><span class="dot"></span>自己瀏覽</span>`;
   return `<div class="phone">
-    <header class="bar"><span class="brand">寡尿 · 臨床推理</span><span class="spacer"></span>${status}${S.preview?'<button class="btn" data-act="preview">回主持畫面</button>':''}</header>
+    <header class="bar"><span class="brand">寡尿 · 臨床推理</span>${(S.role==='st'&&!S.preview&&S.rt)?'<button class="btn" data-act="talogin" style="margin-left:8px">TA 登入</button>':''}<span class="spacer"></span>${status}${S.preview?'<button class="btn" data-act="preview">回主持畫面</button>':''}</header>
     ${S.note?`<div class="note">${esc(S.note)}</div>`:''}
     ${!S.roomOk&&!S.preview?'<div class="note">你的作答只會留在這支手機上，不會出現在投影幕。</div>':''}
     <section class="sheet">
@@ -681,6 +681,7 @@ document.getElementById('app').addEventListener('click', e=>{
     if(v[d]===b.dataset.v) delete v[d]; else v[d]=b.dataset.v;
     saveMine(); render(); if(!S.preview) pushPresence();
   }
+  else if(act==='talogin'){ if(window.__taLogin) window.__taLogin(); }
   else if(act==='preview'){ S.preview=!S.preview; render(); }
   else if(act==='end' && (S.db||S.room)){ if(S.room) S.room.presence({r:'x'}).catch(()=>{}); (S.db?S.db.doc('live/state').delete():Promise.resolve()).then(()=>{ S.docExists=false; schedule(); }).catch(err=>{ S.note='沒能結束同步（'+((err&&err.code)||'錯誤')+'）。'; schedule(); }); }
 });
@@ -714,6 +715,7 @@ async function init(){
   let user=await new Promise(res=>{ const un=auth.onAuthStateChanged(u=>{ un(); res(u); }); });
   if(!user){ try{ user=(await auth.signInAnonymously()).user; }catch(e){ S.note='無法連線（'+(e.code||'錯誤')+'），先自己往下看。'; if(location.hash==='#ta') showLogin(auth); render(); return; } }
   const teacher=!user.isAnonymous, uid=user.uid;
+  window.__taLogin=()=>showLogin(auth);
   if(location.hash==='#ta' && !teacher) showLogin(auth);
   S.role=teacher?'ta':'st';
   /* shim with the same shape the page code already uses */
