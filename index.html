@@ -501,14 +501,14 @@ function renderTA(){
   if(sec.units && ph!=='want'){
     const shown=S.shown[sec.id]||new Set();
     const prompt = ph==='ask' ? `逐項問大家：${sec.askHint||'這讓你聯想到什麼？'}點一項，顯示教案的聯想。<button class="btn" data-act="showall" style="margin-left:8px">${shown.size?'全部收起':'全部顯示'}</button>` : ph==='clue' ? `${sec.abn?'請大家點出異常的項目。':'請大家點出關鍵線索。'}${S.roomOk?'越多人點，底色越深。':''}點畫面上的句子可以由助教直接標記。`
-                 : ph==='ddx' ? (phasesOf(i).includes('clue') ? '線索找完了：' : '看完這段，') + '請大家調整右側每個診斷的可能性。'+(sec.info?'點檢驗項目可看正常值與用途。':'') : (sec.abn?'框線＝異常項目；標「關鍵」＝教案推理用到。':'框線＝教案推理用到的線索。');
+                 : ph==='ddx' ? (phasesOf(i).includes('clue') ? '線索找完了：' : '看完這段，') + '請大家調整右側每個診斷的可能性。'+(sec.info?'點檢驗項目可看正常值與用途。':'') : (sec.abn?'框線＝異常項目。':'框線＝教案推理用到的線索。');
     body = unitsWrap(sec, eachUnit(sec, u=>{
       const c=a.clue[u.id]||0, frac=a.n?c/a.n:0, ta=marks.has(u.id);
       const pct=Math.round((a.n?frac:(ta?.6:0))*70);
       const keyed = ph==='reveal' && (sec.abn ? u.ab : (u.key && !sec.assoc));
       const cls=['u']; if(ta) cls.push('ta'); if(keyed) cls.push('key');
       const showA = sec.assoc && (ph==='reveal' || ((ph==='ask'||ph==='ddx') && shown.has(u.id)));
-      return `<button class="${cls.join(' ')}" data-act="${(ph==='ask'||((sec.assoc||sec.info)&&ph==='ddx'))?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c?`<span class="cnt">${c}</span>`:''}${keyed?`<span class="tag">${sec.abn?(u.key?'異常・關鍵':'異常'):'教案'}</span>`:(sec.abn&&ph==='reveal'&&u.key?'<span class="tag">關鍵</span>':'')}${showA?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&shown.has(u.id)?infoHTML(u):''}${figHTML(u)}</button>`;
+      return `<button class="${cls.join(' ')}" data-act="${(ph==='ask'||((sec.assoc||sec.info)&&ph==='ddx'))?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c?`<span class="cnt">${c}</span>`:''}${keyed?`<span class="tag">${sec.abn?'異常':'教案'}</span>`:''}${showA?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&shown.has(u.id)?infoHTML(u):''}${figHTML(u)}</button>`;
     }));
     body = `<p class="prompt">${prompt}</p>${body}`;
   }
@@ -579,7 +579,7 @@ function renderST(){
     const F=sec.abn?'ab':'key';
     const hits=sec.units.filter(u=>u[F]&&picks.has(u.id)).length, keys=sec.units.filter(u=>u[F]).length;
     const clued=phasesOf(i).includes('clue');
-    if(ph==='reveal' && clued) body+= sec.abn ? `<p class="score">你點了 <b>${picks.size}</b> 項，其中 <b>${hits}</b> 項是異常（共 ${keys} 項）。實線框＝你點中的異常，虛線框＝漏掉的異常，淡橘＝點了但其實正常。教案推理用到的項目標「關鍵」。</p>` : `<p class="score">你點了 <b>${picks.size}</b> 句，其中 <b>${hits}</b> 句是教案用到的關鍵（共 ${keys} 句）。實線框＝你點中的關鍵，虛線框＝漏掉的關鍵。</p>`;
+    if(ph==='reveal' && clued) body+= sec.abn ? `<p class="score">你點了 <b>${picks.size}</b> 項，其中 <b>${hits}</b> 項是異常（共 ${keys} 項）。實線框＝你點中的異常，虛線框＝漏掉的異常，淡橘＝點了但其實正常。</p>` : `<p class="score">你點了 <b>${picks.size}</b> 句，其中 <b>${hits}</b> 句是教案用到的關鍵（共 ${keys} 句）。實線框＝你點中的關鍵，虛線框＝漏掉的關鍵。</p>`;
     body += unitsWrap(sec, eachUnit(sec, u=>{
       const p=picks.has(u.id); let cls='u';
       if(ph==='reveal' && !clued) cls+= u.key && !sec.assoc ? ' key' : '';
@@ -588,7 +588,7 @@ function renderST(){
       const sh=(S.shown[sec.id]||new Set()).has(u.id);
       const act = ((sec.assoc||sec.info) && ph==='ddx') ? 'reveal1' : (ph==='clue'||(sec.assoc&&ph==='ask')) ? 'pick' : 'pick';
       const live = ph==='clue' || (sec.assoc && (ph==='ask'||ph==='ddx')) || (sec.info && ph==='ddx');
-      return `<button class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${sec.abn&&ph==='reveal'&&u.key?'<span class="tag">關鍵</span>':''}${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&sh?infoHTML(u):''}${figHTML(u)}</button>`;
+      return `<button class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&sh?infoHTML(u):''}${figHTML(u)}</button>`;
     }));
   }
   if(ph==='ddx' || (ph==='reveal' && sec.units)){
@@ -697,7 +697,7 @@ function showLogin(auth){
   el.innerHTML='<form style="background:var(--sheet);color:var(--ink);border-radius:12px;padding:20px;max-width:360px;width:100%;display:grid;gap:10px"><b>老師登入</b><input id="lg-e" type="text" placeholder="代號或 Email" autocomplete="username" autocapitalize="off" style="font:inherit;padding:8px"><input id="lg-p" type="password" placeholder="密碼" autocomplete="current-password" style="font:inherit;padding:8px"><div id="lg-m" style="color:var(--bad);font-size:13px"></div><div style="display:flex;gap:8px"><button class="btn primary" type="submit">登入</button><button class="btn" type="button" id="lg-c">取消</button></div></form>';
   el.querySelector('#lg-c').onclick=()=>{ el.hidden=true; location.hash=''; };
   el.querySelector('form').onsubmit=async ev=>{ ev.preventDefault();
-    try{ await auth.signInWithEmailAndPassword(((v)=>/^\d+$/.test(v)?v+'@medteaching-e190d.web.app':v)(el.querySelector('#lg-e').value.trim()), el.querySelector('#lg-p').value); location.hash=''; location.reload(); }
+    try{ await auth.signInWithEmailAndPassword(((v)=>/^\d+$/.test(v)?v+'@medteaching-e190d.web.app':v)(el.querySelector('#lg-e').value.trim()), el.querySelector('#lg-p').value); try{sessionStorage.setItem('taFresh','1')}catch(_){} location.hash='#ta'; location.reload(); }
     catch(e){ el.querySelector('#lg-m').textContent='登入失敗（'+(e.code||'錯誤')+'）'; } };
 }
 async function init(){
@@ -708,6 +708,9 @@ async function init(){
   firebase.initializeApp(cfg);
   const auth=firebase.auth(), rtdb=firebase.database();
   if(location.hash==='#logout'){ await auth.signOut(); location.hash=''; }
+  /* 助教登入只活到下一次重整：重整（不是剛登入造成的那次）就先登出，#ta 會再跳出登入畫面 */
+  try{ const nav=(performance.getEntriesByType('navigation')[0]||{}).type; const fresh=sessionStorage.getItem('taFresh'); sessionStorage.removeItem('taFresh');
+    if(nav==='reload' && !fresh && location.hash==='#ta') await auth.signOut(); }catch(_){}
   let user=await new Promise(res=>{ const un=auth.onAuthStateChanged(u=>{ un(); res(u); }); });
   if(!user){ try{ user=(await auth.signInAnonymously()).user; }catch(e){ S.note='無法連線（'+(e.code||'錯誤')+'），先自己往下看。'; if(location.hash==='#ta') showLogin(auth); render(); return; } }
   const teacher=!user.isAnonymous, uid=user.uid;
