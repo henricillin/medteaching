@@ -313,28 +313,28 @@ const SECTIONS = [
   <li>四肢許多瘀點 → 已出現<b>血小板低下</b>，是血栓性微血管病變的表現之一；結膜蒼白＋黃疸代表<b>溶血性貧血加重</b>。</li></ol>
   <p>病況不穩定，考慮的鑑別診斷都會危及生命，要盡快抽血與影像檢查。</p>`},
 
-{ id:'lab', no:'(4)', title:'實驗室數據', layout:'list', data:1, abn:1, phases:['want','clue','ddx','reveal'], want:['你會先抽哪些血、驗哪些項目？','每一項是想排除或支持哪個診斷？'],
+{ id:'lab', no:'(4)', title:'實驗室數據', layout:'list', data:1, abn:1, info:1, phases:['want','clue','ddx','reveal'], want:['你會先抽哪些血、驗哪些項目？','每一項是想排除或支持哪個診斷？'],
   units:[
-    {id:'l1',ab:1,g:'腎功能・電解質・酸鹼',t:'BUN 223 mg/dL',key:1},
-    {id:'l2',ab:1,t:'Cr 15.92 mg/dL',key:1},
-    {id:'l3',t:'K 3.7 mEq/L'},
-    {id:'l4',ab:1,t:'ABG pH 7.10・pCO₂ 29 mmHg・HCO₃⁻ 9.0 mmol/L',key:1},
-    {id:'l5',t:'Lactate 13.1 mg/dL'},
-    {id:'l6',ab:1,g:'溶血・血液',t:'Hb 4.5 g/dL',key:1},
-    {id:'l7',ab:1,t:'Platelet 103 K/µL',key:1},
-    {id:'l8',ab:1,t:'LDH 2136 U/L',key:1},
-    {id:'l9',ab:1,t:'Haptoglobin < 5.83 mg/dL',key:1},
-    {id:'l10',ab:1,t:'T-bil 2.7 / D-bil 0.3 mg/dL',key:1},
-    {id:'l11',ab:1,t:'Blood smear: fragmented RBC 3+',key:1},
-    {id:'l12',t:'Direct & indirect Coombs test: negative',key:1},
-    {id:'l13',t:'PT / APTT: normal',key:1},
-    {id:'l14',t:'ADAMTS13 activity 80%',key:1},
-    {id:'l15',g:'其他',t:'GPT 15 IU/L',key:1},
-    {id:'l16',t:'Albumin 3.5 g/dL'},
-    {id:'l17',t:'CRP 0.5'},
-    {id:'l18',ab:1,t:'Troponin I 1.3 → 5.66 ng/mL',key:1},
-    {id:'l19',t:'Stool Shiga toxin: negative',key:1},
-    {id:'l20',t:'Stool O157:H7: negative',key:1}],
+    {id:'l1',n:"7–20 mg/dL",w:"腎功能指標，腎臟排不掉時尿素氮會堆積。",ab:1,g:'腎功能・電解質・酸鹼',t:'BUN 223 mg/dL',key:1},
+    {id:'l2',n:"女性約 0.5–1.1 mg/dL",w:"腎臟過濾能力的指標，越高代表腎功能越差。",ab:1,t:'Cr 15.92 mg/dL',key:1},
+    {id:'l3',n:"3.5–5.0 mEq/L",w:"鉀離子，太高或太低都會引起心律不整。",t:'K 3.7 mEq/L'},
+    {id:'l4',n:"pH 7.35–7.45；pCO₂ 35–45 mmHg；HCO₃⁻ 22–26 mmol/L",w:"看酸鹼狀態，以及呼吸有沒有代償。",ab:1,t:'ABG pH 7.10・pCO₂ 29 mmHg・HCO₃⁻ 9.0 mmol/L',key:1},
+    {id:'l5',n:"約 4.5–19.8 mg/dL（0.5–2.2 mmol/L）",w:"組織缺氧、灌流不足時會升高。",t:'Lactate 13.1 mg/dL'},
+    {id:'l6',n:"女性約 12–16 g/dL",w:"有沒有貧血、貧血有多嚴重。",ab:1,g:'溶血・血液',t:'Hb 4.5 g/dL',key:1},
+    {id:'l7',n:"150–400 K/µL",w:"負責止血的血球，太低會出現瘀點、出血。",ab:1,t:'Platelet 103 K/µL',key:1},
+    {id:'l8',n:"約 140–280 U/L",w:"細胞破壞時會釋出，溶血時明顯升高。",ab:1,t:'LDH 2136 U/L',key:1},
+    {id:'l9',n:"約 30–200 mg/dL（各院差異大）",w:"會結合游離血紅素，溶血時被消耗掉而下降。",ab:1,t:'Haptoglobin < 5.83 mg/dL',key:1},
+    {id:'l10',n:"總膽紅素 0.3–1.2、直接 0–0.3 mg/dL",w:"紅血球大量破壞時，間接膽紅素會升高、皮膚眼睛變黃。",ab:1,t:'T-bil 2.7 / D-bil 0.3 mg/dL',key:1},
+    {id:'l11',n:"幾乎看不到破碎紅血球（< 1%）",w:"看紅血球的形狀，破碎紅血球代表在小血管內被切碎。",ab:1,t:'Blood smear: fragmented RBC 3+',key:1},
+    {id:'l12',n:"陰性",w:"偵測紅血球上有沒有自體抗體；陽性代表免疫性溶血（AIHA）。",t:'Direct & indirect Coombs test: negative',key:1},
+    {id:'l13',n:"PT 約 10–13 秒；APTT 約 25–35 秒",w:"看凝血功能；延長可能是凝血因子被耗盡（如 DIC）或肝功能差。",t:'PT / APTT: normal',key:1},
+    {id:'l14',n:"約 > 50%（各院略不同）",w:"負責切斷超大型 vWF；嚴重缺乏（教案：< 5%）才支持 TTP。",t:'ADAMTS13 activity 80%',key:1},
+    {id:'l15',n:"約 < 35–40 IU/L",w:"肝細胞受損時會升高。",g:'其他',t:'GPT 15 IU/L',key:1},
+    {id:'l16',n:"3.5–5.0 g/dL",w:"肝臟製造的蛋白質，反映營養與肝功能；太低容易水腫。",t:'Albumin 3.5 g/dL'},
+    {id:'l17',n:"一般 < 0.5 mg/dL（單位依各院）",w:"發炎的指標，感染或發炎時會升高。",t:'CRP 0.5'},
+    {id:'l18',n:"< 0.04 ng/mL（各院略不同）",w:"心肌受損的專一指標，升高代表心肌細胞壞死。",ab:1,t:'Troponin I 1.3 → 5.66 ng/mL',key:1},
+    {id:'l19',n:"陰性",w:"確認是不是產志賀毒素的細菌感染，也就是典型 HUS 的原因。",t:'Stool Shiga toxin: negative',key:1},
+    {id:'l20',n:"陰性",w:"最常見的產志賀毒素大腸桿菌菌種。",t:'Stool O157:H7: negative',key:1}],
   cards:[
     {t:'MAHA 怎麼判斷',src:'t',b:'溶血證據：LDH↑、haptoglobin↓、<b>間接</b>膽紅素↑（總 2.7、直接只有 0.3）。加上抹片破碎紅血球、Coombs 陰性 → 微血管病變性溶血性貧血（MAHA），不是自體免疫溶血。'},
     {t:'TMA 是什麼',src:'s',b:'血栓性微血管病變＝<b>MAHA＋血小板低下＋器官損傷</b>（腎、心、腦、眼）。小血管內皮受損、形成微血栓，紅血球擠過時被切碎。'},
@@ -486,6 +486,7 @@ function analysisHTML(sec){ return `<div class="analysis"><h3>教案推理</h3>$
 function unitsWrap(sec, inner){ return `<div class="units ${sec.layout}${sec.data?' data':''}">${inner}</div>`; }
 function eachUnit(sec, fn){ let g=null, out=''; for(const u of sec.units){ if(u.g && u.g!==g && sec.layout==='list'){ g=u.g; out+=`<div class="grp">${esc(g)}</div>`; } out+=fn(u); } return out; }
 function srcTag(v){ return `<span class="src ${v.src}">${v.src==='t'?'教案':'補充'}</span>`; }
+const infoHTML = u => (u.n||u.w) ? `<span class="assoc"><b>正常值</b>　${esc(u.n)}<br><b>用途</b>　${esc(u.w)}</span>` : '';
 const assocHTML = u => u.a ? `<span class="assoc">${srcTag({src:u.as})}→ ${esc(u.a)}</span>` : '';
 
 /* ---------- presenter ---------- */
@@ -500,14 +501,14 @@ function renderTA(){
   if(sec.units && ph!=='want'){
     const shown=S.shown[sec.id]||new Set();
     const prompt = ph==='ask' ? `逐項問大家：${sec.askHint||'這讓你聯想到什麼？'}點一項，顯示教案的聯想。<button class="btn" data-act="showall" style="margin-left:8px">${shown.size?'全部收起':'全部顯示'}</button>` : ph==='clue' ? `${sec.abn?'請大家點出異常的項目。':'請大家點出關鍵線索。'}${S.roomOk?'越多人點，底色越深。':''}點畫面上的句子可以由助教直接標記。`
-                 : ph==='ddx' ? (phasesOf(i).includes('clue') ? '線索找完了：' : '看完這段，') + '請大家調整右側每個診斷的可能性。' : (sec.abn?'框線＝異常項目；標「關鍵」＝教案推理用到。':'框線＝教案推理用到的線索。');
+                 : ph==='ddx' ? (phasesOf(i).includes('clue') ? '線索找完了：' : '看完這段，') + '請大家調整右側每個診斷的可能性。'+(sec.info?'點檢驗項目可看正常值與用途。':'') : (sec.abn?'框線＝異常項目；標「關鍵」＝教案推理用到。':'框線＝教案推理用到的線索。');
     body = unitsWrap(sec, eachUnit(sec, u=>{
       const c=a.clue[u.id]||0, frac=a.n?c/a.n:0, ta=marks.has(u.id);
       const pct=Math.round((a.n?frac:(ta?.6:0))*70);
       const keyed = ph==='reveal' && (sec.abn ? u.ab : (u.key && !sec.assoc));
       const cls=['u']; if(ta) cls.push('ta'); if(keyed) cls.push('key');
       const showA = sec.assoc && (ph==='reveal' || ((ph==='ask'||ph==='ddx') && shown.has(u.id)));
-      return `<button class="${cls.join(' ')}" data-act="${(ph==='ask'||(sec.assoc&&ph==='ddx'))?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c?`<span class="cnt">${c}</span>`:''}${keyed?`<span class="tag">${sec.abn?(u.key?'異常・關鍵':'異常'):'教案'}</span>`:(sec.abn&&ph==='reveal'&&u.key?'<span class="tag">關鍵</span>':'')}${showA?assocHTML(u):''}${figHTML(u)}</button>`;
+      return `<button class="${cls.join(' ')}" data-act="${(ph==='ask'||((sec.assoc||sec.info)&&ph==='ddx'))?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c?`<span class="cnt">${c}</span>`:''}${keyed?`<span class="tag">${sec.abn?(u.key?'異常・關鍵':'異常'):'教案'}</span>`:(sec.abn&&ph==='reveal'&&u.key?'<span class="tag">關鍵</span>':'')}${showA?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&shown.has(u.id)?infoHTML(u):''}${figHTML(u)}</button>`;
     }));
     body = `<p class="prompt">${prompt}</p>${body}`;
   }
@@ -585,9 +586,9 @@ function renderST(){
       else if(ph==='reveal') cls+= u[F] ? (p?' hit':' miss') : (p?' extra':'');
       else if(p) cls+=' pick';
       const sh=(S.shown[sec.id]||new Set()).has(u.id);
-      const act = (sec.assoc && ph==='ddx') ? 'reveal1' : (ph==='clue'||(sec.assoc&&ph==='ask')) ? 'pick' : 'pick';
-      const live = ph==='clue' || (sec.assoc && (ph==='ask'||ph==='ddx'));
-      return `<button class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${sec.abn&&ph==='reveal'&&u.key?'<span class="tag">關鍵</span>':''}${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${figHTML(u)}</button>`;
+      const act = ((sec.assoc||sec.info) && ph==='ddx') ? 'reveal1' : (ph==='clue'||(sec.assoc&&ph==='ask')) ? 'pick' : 'pick';
+      const live = ph==='clue' || (sec.assoc && (ph==='ask'||ph==='ddx')) || (sec.info && ph==='ddx');
+      return `<button class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${sec.abn&&ph==='reveal'&&u.key?'<span class="tag">關鍵</span>':''}${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&sh?infoHTML(u):''}${figHTML(u)}</button>`;
     }));
   }
   if(ph==='ddx' || (ph==='reveal' && sec.units)){
@@ -613,7 +614,7 @@ function renderST(){
     <section class="sheet">
       <span class="phase-tag">${PH[ph]}</span>
       <div class="sec-head"><span class="sec-no">${esc(sec.no)}</span><h1 class="sec-title">${esc(sec.title)}</h1></div>
-      <p class="prompt">${esc(ph==='ask'&&sec.askHint?sec.askHint:(ph==='clue'&&sec.abn?'點出你覺得異常的項目（可複選）':PH_HINT[ph]))}</p>
+      <p class="prompt">${esc(ph==='ask'&&sec.askHint?sec.askHint:(ph==='clue'&&sec.abn?'點出你覺得異常的項目（可複選）':PH_HINT[ph]+(ph==='ddx'&&sec.info?'　點檢驗項目可看正常值與用途。':'')))}</p>
       ${body}
       ${nav}
     </section>
