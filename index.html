@@ -702,7 +702,7 @@ async function init(){
   const auth=firebase.auth(), rtdb=firebase.database();
   if(location.hash==='#logout'){ await auth.signOut(); location.hash=''; }
   let user=await new Promise(res=>{ const un=auth.onAuthStateChanged(u=>{ un(); res(u); }); });
-  if(!user){ try{ user=(await auth.signInAnonymously()).user; }catch(e){ S.note='無法連線（'+(e.code||'錯誤')+'），先自己往下看。'; render(); return; } }
+  if(!user){ try{ user=(await auth.signInAnonymously()).user; }catch(e){ S.note='無法連線（'+(e.code||'錯誤')+'），先自己往下看。'; if(location.hash==='#ta') showLogin(auth); render(); return; } }
   const teacher=!user.isAnonymous, uid=user.uid;
   if(location.hash==='#ta' && !teacher) showLogin(auth);
   S.role=teacher?'ta':'st';
