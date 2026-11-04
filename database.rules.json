@@ -2,7 +2,7 @@
   "rules": {
     "live": {
       ".read": "auth != null",
-      ".write": "auth != null && (auth.token.email === '102697@medteaching-e190d.web.app' || auth.token.email === '102707@medteaching-e190d.web.app')",
+      ".write": "auth != null && (auth.token.email === '102697@medteaching-e190d.web.app' || auth.token.email === '102707@medteaching-e190d.web.app' || auth.token.email === '102703@medteaching-e190d.web.app')",
       ".validate": "newData.hasChildren(['sec','phase'])"
     },
     "presence": {
