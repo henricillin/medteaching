@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>寡尿推理教室</title>
+<title>臨床推理教室</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
 /* Layout: projector = case sheet (left) + differential board (right); phone = one column that follows the TA. Heat = amber, like concentrated urine. */
@@ -81,6 +81,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .units.list .u .cnt+.tag{margin-left:6px}
 .units.list .u{flex-wrap:wrap}
 .assoc{flex-basis:100%;font-size:16px;line-height:1.6;color:var(--key);margin-top:2px}
+.assoc.tst{color:var(--ink)}.assoc.tst b{color:var(--key);font-weight:700}
+.maplist{margin:6px 0;padding-left:1.2em}.maplist li{font-size:16px;line-height:1.75}
 .phone .assoc{font-size:16px}
 .u.pick{background:color-mix(in srgb,var(--heat) 45%,transparent)}
 .u.hit{border-color:var(--key)}
@@ -407,14 +409,192 @@ const SECTIONS = [
   <li>自體抗體皆陰性，且血漿置換四次溶血指標仍未改善 → 確定為 <b>aHUS</b>，接續<b>補體抑制劑</b>；aHUS 基因檢測可做為預後分析。</li></ol>`},
 ];
 
+/* ---------- 骨骼肌肉理學檢查（講義與課後筆記；「補充」為助教補充） ---------- */
+const MSK_COMMON = {course:'msk', layout:'list', assoc:1, phases:['want','ask','reveal'], askHint:'這個檢查在看什麼？怎麼做？', rev:'每個檢查：目的、做法、陽性代表什麼。'};
+SECTIONS.push(
+{ ...MSK_COMMON, id:'m0', short:'病例', qr:1, no:'(1)', title:'骨骼肌肉理學檢查：病例', phases:['ask','reveal'], layout:undefined, assoc:undefined,
+  statement:'54 歲男性，右腿疼痛、無法負重已 1 個月',
+  ask:['這是有意義的關節病兆嗎？關節構造中，哪些系統可能出問題？','依這個假設，檢查要特別著重哪些部分？','得到檢查結果後，怎麼判斷病變的位置？要選哪些檢查來證明你的推論？'],
+  cards:[
+    {t:'兩側比較',b:'人體兩側可能有個體差異，檢查時務必與健側比對。'},
+    {t:'主動 vs 被動',b:'主動受限、被動正常 → 肌腱／肌肉損傷或神經問題（如旋轉袖撕裂）。兩者皆受限且終末端僵硬 → 沾黏或關節退化（如五十肩）。'},
+    {t:'量角度',b:'量角器的中心要放在關節近端與遠端兩肢段的交叉點，量角器的兩支懸臂分別對齊近端與遠端肢段的長軸。'},
+    {t:'穩定度評估',b:'一手支撐受試者關節的近端肢段，另一手支撐遠端肢段，施加外翻或內翻的應力，評估關節間隙的變化。關節完全伸直及屈曲 30 度時各做一次，評估側韌帶損傷的程度。'},
+    {t:'末梢循環',b:'先看皮膚顏色是否紅潤，再壓住指頭末端（指腹或指甲）測 capillary refill time。正常應小於 2 秒。'}],
+  analysis:`<ol>
+  <li>先從主訴與簡單病史判斷：這是不是有意義的關節病兆？構造上是哪個系統出問題？</li>
+  <li>依這個假設決定檢查重點；做完檢查，用解剖學判斷病變位置。</li>
+  <li>選擇適合的檢查來證明你的推論。</li>
+  <li>依背景資料與臨床病程做鑑別診斷，最後理解疾病的病理機轉。</li></ol>
+  <p>接下來依序練習：<b>髖、膝、肩</b>。每一段都是同一個流程：先想怎麼檢查，再對照做法與陽性表現。</p>`},
+
+/* ---- 髖 ---- */
+{ ...MSK_COMMON, id:'hp', short:'髖', no:'(2)', title:'髖關節',
+  statement:'回到病例：右腿痛、無法負重。髖關節要怎麼檢查？',
+  want:['髖周的疼痛可能來自關節本身、肌肉攣縮，還是腰椎神經根？','你會用哪些動作區分它們？'],
+  units:[
+    {id:'thomas', g:'髖屈曲攣縮', t:'Thomas test',
+      pu:'評估髖屈曲攣縮（hip flexion contracture）與髂腰肌緊繃。',
+      how:'病人先坐在診療床邊，再仰臥、抱住雙膝；請病人把受測側下肢慢慢放下（hip extension），小腿自然垂在床邊。',
+      nor:'大腿能放平貼床，小腿自然垂下。',
+      pos:'無法 full hip extension（大腿抬離床面）→ hip flexor（髂腰肌）攣縮。小腿無法自然垂下 → knee extensor（股四頭肌）攣縮。兩者都有 → 兩種攣縮並存。',
+      cmp:'Thomas：大腿碰不到床 → 髂腰肌緊繃。Kendall：膝伸直超過 90° → 股直肌緊繃。'},
+    {id:'faber', g:'髖關節與薦髂關節', t:'Patrick test（FABER test）',
+      pu:'評估髖關節或薦髂關節（SI joint）的病變。',
+      how:'病人仰臥。受測側髖做屈曲（Flexion）、外展（ABduction）、外旋（External Rotation）：把足踝放在對側膝上方，擺成「4」字。一手固定對側 ASIS，另一手緩慢向下壓受測側的膝。',
+      nor:'膝可接近床面，兩側對稱，沒有疼痛。',
+      pos:'髖（鼠蹊）部疼痛 → 較支持髖關節內的病灶，最常見的是股骨頭缺血性壞死。後方 SI joint 區疼痛 → 可能來自薦髂關節。只有內收肌緊繃，不等同陽性。',
+      why:'這個動作會增加 hip joint pressure，同時壓迫髖關節囊與 SI 區域，所以一定要依疼痛的位置判讀。'},
+    {id:'slr', g:'腰椎神經根', t:'Straight leg raising test（SLR）',
+      pu:'評估腰薦神經根／坐骨神經的張力，常用於懷疑腰椎椎間盤突出造成的坐骨神經痛（sciatica）。',
+      how:'病人仰臥、雙腿伸直放鬆，檢查者站在受測側。一手托住足跟，另一手維持膝伸直，緩慢被動抬高整條腿（髖屈曲）。記錄出現症狀的角度與疼痛分布；若出現典型放射痛，略降低角度後再背屈踝關節，增加神經張力。',
+      nor:'只有大腿後側有牽拉感，沒有往膝下的放射痛。',
+      pos:'抬到 30°–70° 時，重現由腰／臀沿後外側腿向膝下放射、符合皮節分布的疼痛 → 腰椎神經根受壓，常見於椎間盤突出（L4–S1）。只是膕窩（腿後）緊繃痛，多半是 hamstring tightness，不算陽性。'},
+    {id:'cslr', g:'腰椎神經根', t:'Crossed SLR（交叉直腿抬高）',
+      how:'抬高沒有症狀的那一側腿。',
+      pos:'誘發出症狀側的根性疼痛 → 對椎間盤突出更具提示性（特異度高）。'},
+    {id:'rslr', g:'腰椎神經根', t:'Reversed SLR（Femoral stretch test）',
+      pu:'提示高位腰椎神經根病變。'}],
+  map:[['髂腰肌／股四頭肌攣縮','Thomas test'],['髖關節內病灶（如股骨頭缺血性壞死）','Patrick：髖（鼠蹊）痛'],['薦髂關節','Patrick：後方 SI 區痛'],['L4–S1 神經根（常見椎間盤突出）','SLR；crossed SLR 更具特異性'],['高位腰椎神經根','Reversed SLR']],
+  analysis:`<p>三個檢查看的是三個不同的地方：<b>肌肉攣縮</b>（Thomas）、<b>髖與薦髂關節</b>（Patrick）、<b>神經根</b>（SLR）。同樣是腿痛，要靠疼痛的位置與誘發的動作區分。</p>
+  <p><span class="src s">補充</span>病例是右腿痛、無法負重：若 Patrick 在髖（鼠蹊）部誘發疼痛，要先想髖關節內的問題，例如股骨頭缺血性壞死；若是往膝下放射的疼痛，才往神經根想。</p>`},
+
+/* ---- 膝 ---- */
+{ ...MSK_COMMON, id:'kn1', short:'膝 活動度', no:'(3)', title:'膝關節：活動度',
+  statement:'膝關節活動度：正常能伸到幾度、屈到幾度？',
+  want:['請病人做哪些動作？','除了角度，你還要觀察什麼？'],
+  units:[
+    {id:'kext', t:'伸直（Extension）', nor:'約 0°；有些人有輕微的過度伸直（hyperextension，約 −10°）。'},
+    {id:'kflex', t:'屈曲（Flexion）', nor:'約 130°–140°。'}],
+  map:[['檢查時要注意','疼痛、活動受限、左右兩側不對稱']],
+  analysis:`<p>膝關節的理學檢查包含<b>活動度、韌帶穩定度、半月板</b>三部分。檢查時除了看角度，也要注意有沒有疼痛、活動受限，或左右兩側不對稱。臨床上依病人的疼痛位置與受傷機轉，選擇適合的特殊檢查。</p>`},
+{ ...MSK_COMMON, id:'kn2', short:'膝 韌帶', no:'(4)', title:'膝關節：韌帶穩定度',
+  statement:'膝的四條重要韌帶：ACL、PCL、MCL、LCL，各用哪個測試？',
+  want:['每一條韌帶，你會用什麼動作去「拉」或「推」它？','要在膝伸直還是屈曲幾度做？'],
+  units:[
+    {id:'lach', g:'前十字韌帶（ACL）', t:'Lachman test',
+      how:'病人仰臥，膝屈曲約 20°–30°，腿部肌肉放鬆。一手穩住股骨，另一手抓住近端脛骨，把脛骨往前拉（相對股骨向前滑動）；與對側膝比較。',
+      pos:'脛骨相對股骨明顯向前位移（anterior translation），且終點（endpoint）偏軟 → ACL injury。'},
+    {id:'adrawer', g:'前十字韌帶（ACL）', t:'Anterior drawer test',
+      how:'病人仰臥，膝屈曲 90°，在近端脛骨後方向前施力。',
+      pos:'脛骨出現 anterior translation → ACL injury。',
+      cmp:'和 Lachman 差在膝的角度：Lachman 屈曲 20°–30°，Anterior drawer 屈曲 90°。'},
+    {id:'pdrawer', g:'後十字韌帶（PCL）', t:'Posterior drawer test',
+      how:'病人仰臥，膝屈曲約 90°。兩手拇指放在前方關節線，其餘手指環繞近端脛骨後方；確認膕旁肌（hamstring）放鬆，對近端脛骨向後施力。',
+      pos:'與對側相比，脛骨向後位移增加，終點偏軟 → PCL insufficiency。後移超過 5 mm 視為異常。'},
+    {id:'valgus', g:'內側副韌帶（MCL）', t:'Valgus stress test',
+      how:'病人仰臥，分別在膝伸直（0°）與屈曲 30° 測試。一手穩定踝部，另一手放在膝外側／股骨外髁，施加外翻（valgus）力，觀察疼痛與內側關節間隙打開的程度；與對側比較。',
+      pos:'內側膝痛（沿 MCL），或內側關節間隙較對側打開 → MCL injury。',
+      cmp:'屈曲 30°：主要測 MCL，鬆弛增加 → 單純 MCL 損傷。伸直 0°：MCL 加上其他穩定結構（ACL／PCL、關節囊、後內側穩定結構）。0° 與 30° 都鬆 → 較廣泛的韌帶損傷，不只 MCL。'},
+    {id:'varus', g:'外側副韌帶（LCL）', t:'Varus stress test',
+      how:'病人仰臥，分別在膝伸直（0°）與屈曲 20°–30° 測試。一手穩定踝部，施加內翻（varus）力，打開外側關節間隙；與對側比較。',
+      pos:'外側疼痛，或外側關節間隙較對側打開 → LCL injury。',
+      cmp:'屈曲 20°–30° 陽性 → 相對單純的 LCL 損傷。0° 也陽性 → 考慮更廣泛的韌帶損傷。'}],
+  map:[['ACL','Lachman（屈曲 20°–30°）、Anterior drawer（屈曲 90°）'],['PCL','Posterior drawer（屈曲 90°）'],['MCL','Valgus stress（伸直與屈曲 30°）'],['LCL','Varus stress（伸直與屈曲 20°–30°）']],
+  analysis:`<p>四條韌帶各配一個動作：<b>ACL 往前拉、PCL 往後推、MCL 外翻、LCL 內翻</b>。側韌帶（MCL、LCL）要在膝伸直和屈曲 30° 各測一次，兩個角度都鬆代表不只側韌帶受傷。每一個測試都要和對側比較。</p>`},
+{ ...MSK_COMMON, id:'kn3', short:'膝 半月板', no:'(5)', title:'膝關節：半月板',
+  statement:'膝蓋疼痛、卡卡的：怎麼檢查半月板？',
+  want:['半月板在關節線的哪裡？','怎麼讓撕裂的半月板在檢查時「卡」出來？'],
+  units:[
+    {id:'mcm', t:'McMurray test',
+      pu:'檢查內側與外側半月板有沒有撕裂。',
+      how:'病人仰臥，髖與膝盡量屈曲（knee hyperflexion）。一手摸關節線，另一手抓住腳跟、控制腳掌與脛骨旋轉；慢慢伸直膝蓋，同時轉動脛骨並施加外翻或內翻應力。',
+      pos:'外旋＋外翻 → 測內側半月板。內旋＋內翻 → 測外側半月板。出現可摸到或聽到的 click／pop，或重現關節線疼痛 → 該側半月板損傷。'}],
+  map:[['內側半月板','脛骨外旋＋外翻，後內側 clicking'],['外側半月板','脛骨內旋＋內翻，後外側 clicking']],
+  analysis:`<p>McMurray 是同一個動作做兩次：先<b>外旋</b>測內側、再<b>內旋</b>測外側。診斷靠的是<b>關節線上的 click／pop 或重現的疼痛</b>。</p>`},
+
+/* ---- 肩 ---- */
+{ ...MSK_COMMON, id:'sh1', short:'肩 看與動', no:'(6)', title:'肩關節：看與動',
+  statement:'肩膀痛、手舉不起來：要請病人做哪些動作？',
+  want:['看肩膀外觀時，要跟哪一側比較？','請病人做哪些動作？正常範圍各是多少？'],
+  units:[
+    {id:'rflex', t:'屈曲（Flexion）', nor:'0°–180°'},
+    {id:'rext', t:'伸直（Extension）', nor:'0°–60°'},
+    {id:'rabd', t:'外展（Abduction）', nor:'0°–180°'},
+    {id:'radd', t:'內收（Adduction）', nor:'約 30°–50°'},
+    {id:'rer', t:'外旋（External rotation）', nor:'0°–90°'},
+    {id:'rir', t:'內旋（Internal rotation）', nor:'0°–70°～90°'}],
+  map:[['主動受限，被動正常','肌腱／肌肉損傷或神經問題（如旋轉袖撕裂）'],['主動、被動都受限，終末端僵硬','沾黏或關節退化（如五十肩）']],
+  cards:[{t:'肩的重要構造',b:'骨頭：肩胛骨、肱骨、鎖骨。另有韌帶、關節與關節囊。旋轉袖肌群：棘上肌、棘下肌、肩胛下肌、小圓肌。還有肱二頭肌。'}],
+  analysis:`<ol>
+  <li>先看外觀，<b>兩側比較</b>：兩側可能有個體差異，一定要與健側肩關節比對。</li>
+  <li>再看活動：<b>主動（AROM）受限、被動（PROM）正常</b> → 肌腱／肌肉損傷或神經問題（如旋轉袖撕裂）。</li>
+  <li><b>兩者都受限</b>且終末端僵硬 → 沾黏或關節退化（如五十肩）。</li></ol>`},
+{ ...MSK_COMMON, id:'sh2', short:'肩 夾擠不穩', no:'(7)', title:'肩關節：夾擠・不穩定・盂唇',
+  statement:'肩痛要分辨：夾擠、不穩定、盂唇，還是二頭肌肌腱？',
+  want:['懷疑肩峰下夾擠時，你會怎麼讓它「夾」出來？','怎麼誘發肩膀快脫位的感覺？','盂唇與二頭肌肌腱的問題怎麼分？'],
+  units:[
+    {id:'neer', g:'夾擠（impingement）', t:'Neer impingement test',
+      pu:'找肩峰下夾擠（subacromial impingement）。',
+      how:'病人坐著。一手固定病人的肩胛骨，另一手把患側手臂維持在完全內轉（大拇指朝下），被動沿矢狀面向前上舉（屈曲）。',
+      pos:'誘發肩峰下間隙的疼痛 → subacromial impingement。',
+      why:'大結節（greater tuberosity）與棘上肌肌腱撞擊肩峰前下緣；敏感度高（high sensitivity）。'},
+    {id:'hawk', g:'夾擠（impingement）', t:'Hawkins-Kennedy test',
+      how:'病人肩與肘各屈曲 90°。檢查者一手托住手肘，另一手下壓前臂，做強制的被動內轉（internal rotation）。',
+      pos:'誘發肩前方／肩峰下疼痛 → 肩峰下夾擠。',
+      why:'棘上肌肌腱與肩峰下組織被壓迫在喙肩韌帶與喙突之下。'},
+    {id:'appr', g:'不穩定（instability）', t:'Anterior apprehension test',
+      pu:'評估前向不穩定（anterior instability）。',
+      how:'肩外展 90°、肘屈曲 90°。檢查者一手固定手肘，另一手溫和、緩慢地把前臂往後做被動外旋（External Rotation），到最大程度；必要時，一手自肱骨頭後方往前輕推。',
+      pos:'病人露出肩膀快脫位的驚恐表情（恐懼感，不是單純的疼痛）→ shoulder joint anterior instability。',
+      cmp:'（補充）Jobe relocation test：病人仰臥，從前方往後壓肱骨頭，恐懼感減輕，更支持前向不穩定。'},
+    {id:'obr', g:'盂唇與二頭肌', t:"O'Brien test",
+      pu:'檢查盂唇病變（SLAP lesion），也可能是肩鎖關節病變。',
+      how:'手臂伸直前屈 90°，水平內收 10°–15°，前臂完全內轉（大拇指朝下）。檢查者向下施壓，請病人抗阻向上頂；再改成前臂外轉（手掌朝上）做一次。',
+      pos:'大拇指朝下抵抗時疼痛，手掌朝上時疼痛減輕或消失 → labral lesion（深層疼痛）或肩鎖關節病變（AC joint arthropathy）。',
+      why:'內轉時，肱二頭肌長頭肌腱被拉緊並下壓盂唇，產生牽引力；受傷在深層。'},
+    {id:'speed', g:'盂唇與二頭肌', t:"Speed's test",
+      pu:'檢查肱二頭肌肌腱。',
+      how:'肘伸直、前臂旋後（手掌朝上）、肩前屈 90°。檢查者對前臂施向下阻力，請病人向上抵抗，評估疼痛有沒有變化。',
+      pos:'二頭肌溝（bicipital groove）疼痛 → biceps tendinitis。',
+      why:'外轉時肌腱張力被卸除，盂唇不再受到擠壓拉扯；受傷在淺層。'}],
+  map:[['肩峰下夾擠','Neer、Hawkins-Kennedy'],['前向不穩定','Anterior apprehension（恐懼感）'],['盂唇病變（SLAP）','O’Brien（深層）'],['二頭肌肌腱炎','Speed’s（淺層）']],
+  analysis:`<p>O'Brien 與 Speed's 是<b>同樣的姿勢、不同的前臂旋轉</b>：內轉時拉緊二頭肌長頭肌腱、牽引盂唇（深層）；外轉時卸除肌腱張力（淺層）。比較兩個姿勢的疼痛差別，就能分辨。</p>`},
+{ ...MSK_COMMON, id:'sh3', short:'肩 旋轉袖', no:'(8)', title:'肩關節：旋轉袖',
+  statement:'旋轉袖有四條肌肉：棘上肌、棘下肌、小圓肌、肩胛下肌。各自怎麼測？',
+  want:['這四條肌肉各負責肩的什麼動作？','你會怎麼設計動作，讓有問題的那一條露出破綻？'],
+  units:[
+    {id:'drop', g:'棘上肌（supraspinatus）', t:'Drop arm test',
+      how:'將患側手臂被動外展（講義 90°；筆記 150°–180°），告知病人要緩慢、受控地主動把手臂放下。',
+      pos:'在外展 90° 左右或更低的角度時，因無力支撐手臂而突然向下墜落（要扶一下）→ supraspinatus 的問題。',
+      why:'棘上肌斷裂，沒有辦法支撐。'},
+    {id:'empty', g:'棘上肌（supraspinatus）', t:'Empty can test',
+      how:'手臂伸直前屈 90° 並水平外展 30°–90°，前臂完全內轉使大拇指朝下。檢查者向下施壓，請病人抗阻向上頂。',
+      pos:'無力（或疼痛）→ 棘上肌撕裂無力。',
+      cmp:'延伸：full can test 把大拇指改成朝上，可減少肩峰下機械性夾擠疼痛造成的偽陽性。與 O’Brien 只差在外展，因為棘上肌主要負責肩關節的外展。'},
+    {id:'erlag', g:'棘下肌（infraspinatus）', t:'External rotation lag sign',
+      how:'一手托住病人手肘，另一手握住手腕，把肩關節被動帶到接近最大的外轉角度（約 70°–80°），放手，請病人自己維持。',
+      pos:'病人無法自主維持在外轉位置（lag）→ 棘下肌（或小圓肌）斷裂，沒有辦法支撐。',
+      cmp:'掉落幅度（lag angle）：小於 5°–10° → 可能是小撕裂或部分肌力減退。顯著（通常 > 10°–15°）→ 高度提示棘下肌全層撕裂。若在外展 90° 下測試且手完全垂落、無法維持（Hornblower’s sign）→ 提示小圓肌嚴重撕裂或脂肪浸潤。'},
+    {id:'horn', g:'小圓肌（teres minor）', t:"Hornblower's sign",
+      how:'主動動作（經典）：請病人嘗試把手放到嘴邊（如吃東西或吹號角的動作）。阻力測試（Patte test）：檢查者把病人患側手臂被動帶至肩外展 90°（肩胛骨平面）、屈肘 90°，一手托住手肘，另一手放在前臂背面施加向前的阻力，請病人用力做肩關節外轉（External Rotation）抗阻。',
+      pos:'無法維持肩外展 90°、外轉的吹號角姿勢 → teres minor 的問題。'},
+    {id:'belly', g:'肩胛下肌（subscapularis）', t:'Belly press test',
+      how:'手掌平貼腹部用力下壓，並試圖維持手肘向前。',
+      pos:'無法維持手肘前傾而向後掉落，或需藉由手腕極度屈曲代償施力 → 陽性；可能是 upper subscapularis 的問題。',
+      why:'要做出壓肚子的動作，需要肩關節極度內轉。'},
+    {id:'lift', g:'肩胛下肌（subscapularis）', t:'Lift-off test',
+      how:'病人把手背放在下背部腰椎處，主動向後推離背部。',
+      pos:'無法把手抬離背部，或無力抗阻 → 陽性；高度提示肩胛下肌（尤其中下部）全層撕裂。',
+      why:'無法做出 shoulder internal rotation and adduction 的動作 → lower subscapularis 的問題。'}],
+  map:[['棘上肌','Drop arm、Empty can'],['棘下肌','External rotation lag sign'],['小圓肌','Hornblower’s sign（Patte test）'],['肩胛下肌','Belly press（上部）、Lift-off（下部）']],
+  analysis:`<p>四條旋轉袖肌肉，各用一個<b>讓它單獨出力或維持位置</b>的動作測：棘上肌管<b>外展</b>，棘下肌與小圓肌管<b>外轉</b>，肩胛下肌管<b>內轉</b>。陽性表現都是<b>無力、掉落、維持不住</b>。</p>`}
+);
+
 /* ---------- helpers ---------- */
 const PH = {want:'想看什麼', ask:'討論', clue:'找線索', ddx:'排鑑別', reveal:'揭曉'};
-const PH_HINT = {want:'先想一想：你還想知道什麼？現場討論後再揭曉', ask:'先想一想，等一下現場討論', clue:'點出你覺得會改變判斷的線索（可複選）', ddx:'看完這段，每個診斷的可能性怎麼變？', reveal:'對照教案的推理'};
+const PH_HINT = {want:'先想一想：你還想知道什麼？現場討論後再揭曉', ask:'先想一想，等一下現場討論', clue:'點出你覺得會改變判斷的線索（可複選）', ddx:'助教帶著排：看每個診斷的可能性怎麼變', reveal:'對照教案的推理'};
 const ST = {open:'待觀察', keep:'持平', up:'↑ 上調', down:'↓ 下調', out:'排除', lead:'最可能'};
 const VOTE_OF = {up:'u', lead:'u', keep:'k', down:'d', out:'d'};
 const VLAB = {u:'↑ 上調', k:'持平', d:'↓ 下調'};
 const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const phasesOf = i => SECTIONS[i].phases || (SECTIONS[i].units ? ['clue','ddx','reveal'] : ['reveal']);
+/* 兩門課共用同一份進度：每段都屬於某一門課，助教切換課程＝跳到那門課的第一段 */
+const COURSES = {oli:{tab:'寡尿', brand:'寡尿 · 臨床推理'}, msk:{tab:'骨骼肌肉', brand:'骨骼肌肉 · 理學檢查'}};
+const courseOf = i => SECTIONS[i].course || 'oli';
+const secsOf = c => SECTIONS.map((s,k)=>k).filter(k=>courseOf(k)===c);
+const hasDx = sec => (sec.course||'oli')==='oli';
+const mapHTML = sec => sec.map ? `<div class="analysis"><h3>${esc(sec.mapTitle||'結構對照')}</h3><ul class="maplist">${sec.map.map(([k,v])=>`<li><b>${esc(k)}</b>　${esc(v)}</li>`).join('')}</ul></div>` : '';
 function statementHTML(sec, ph){
   if(ph==='want' && sec.want) return `<ol class="ask">${sec.want.map(q=>`<li>${esc(q)}</li>`).join('')}</ol>`;
   if(!sec.statement) return '';
@@ -452,13 +632,16 @@ function loadMine(){ try{ const o=JSON.parse(localStorage.getItem(LS)||'{}'); re
 function saveMine(){ try{ localStorage.setItem(LS, JSON.stringify(S.mine)); }catch(e){} }
 function applyLive(){
   const d=S.roomLive||S.dbLive, was=S.live.sec+'/'+S.live.phase;
-  if(validLive(d)){ S.follow=true; S.live={sec:d.sec,phase:d.phase}; } else S.follow=false;
+  if(validLive(d)){ S.follow=true; S.live={sec:d.sec,phase:d.phase}; S.tam=cleanMarks(d.m); } else S.follow=false;
   if(was!==S.live.sec+'/'+S.live.phase){ S.open=null; window.scrollTo({top:0}); }
   pushPresence(); schedule();
 }
+/* 助教在 ddx 階段排的每個診斷（u/k/d），隨進度同步給學生；來自資料庫，逐項驗證 */
+function cleanMarks(m){ const o={}; if(m&&typeof m==='object') for(const d of Object.keys(m)) if(DX[d]&&VLAB[m[d]]) o[d]=m[d]; return o; }
+const taMarksDx = () => S.role==='ta' ? (S.taDx[SECTIONS[S.live.sec].id]||{}) : S.tam;
 function pushTA(){ if(!S.room||S.role!=='ta'||S.preview) return; S.room.presence({r:'t', l:{sec:S.live.sec, phase:S.live.phase}}).catch(()=>{}); }
-const S = { role:'st', preview:false, live:{sec:0,phase:'ask'}, follow:false, docExists:false,
-  db:null, room:null, roomOk:false, peers:[], taMarks:{}, shown:{}, mine:loadMine(), open:null, dxOpen:new Set(), note:'' };
+const S = { role:'st', preview:false, live:location.hash==='#msk' ? {sec:secsOf('msk')[0],phase:phasesOf(secsOf('msk')[0])[0]} : {sec:0,phase:'ask'}, follow:false, docExists:false,
+  db:null, room:null, roomOk:false, peers:[], taMarks:{}, taDx:{}, tam:{}, shown:{}, mine:loadMine(), open:null, dxOpen:new Set(), note:'' };
 
 /* ---------- aggregation (presence is untrusted: validate every id) ---------- */
 function agg(){
@@ -468,7 +651,6 @@ function agg(){
     const pr=p.presence||{}; if(pr.r!=='s' || (p.isMe&&p.sameTab)) continue; online++;
     if(pr.s!==sec.id) continue; n++;
     if(Array.isArray(pr.c)) for(const id of new Set(pr.c)) if(ids.has(id)) clue[id]=(clue[id]||0)+1;
-    if(pr.v && typeof pr.v==='object') for(const d of Object.keys(pr.v)){ const x=pr.v[d]; if(!DX[d]||!VLAB[x]) continue; (vote[d]=vote[d]||{u:0,k:0,d:0})[x]++; }
   }
   return {n,online,clue,vote};
 }
@@ -480,9 +662,9 @@ const FIGS = {
   i7:{src:"data:image/jpeg;base64,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",alt:"眼底鏡",cap:"眼底鏡：雙眼 cotton wool spots（白色絨毛狀斑）"}};
 const figHTML = u => (FIGS[u.id] && S.live.phase!=='want') ? `<span class="fig"><img src="${FIGS[u.id].src}" alt="${FIGS[u.id].alt}"><span class="figcap">${FIGS[u.id].cap}</span></span>` : '';
 function cardsHTML(sec, prefix){
-  if(!sec.cards || S.live.phase==='want' || (sec.id==='cc' && S.live.phase==='ask')) return '';
+  if(!sec.cards || S.live.phase==='want' || (sec.id==='cc' && S.live.phase==='ask') || (!hasDx(sec) && S.live.phase!=='reveal')) return '';
   const k = S.open && S.open.startsWith(prefix) ? +S.open.slice(prefix.length) : -1;
-  return `<div class="cards"><span class="lbl">生理小卡</span>${sec.cards.map((c,j)=>`<button class="cardbtn${j===k?' on':''}" data-act="open" data-k="${prefix}${j}">${esc(c.t)}</button>`).join('')}</div>`
+  return `<div class="cards"><span class="lbl">${hasDx(sec)?'生理小卡':'補充小卡'}</span>${sec.cards.map((c,j)=>`<button class="cardbtn${j===k?' on':''}" data-act="open" data-k="${prefix}${j}">${esc(c.t)}</button>`).join('')}</div>`
     + (k>=0 ? `<div class="cardbody">${srcTag(sec.cards[k])}${sec.cards[k].b}</div>` : '');
 }
 function analysisHTML(sec){ return `<div class="analysis"><h3>教案推理</h3>${sec.analysis}</div>`; }
@@ -491,13 +673,22 @@ function eachUnit(sec, fn){ let g=null, out=''; for(const u of sec.units){ if(u.
 /* 預設都是教案；只有助教補充才標出來 */
 function srcTag(v){ return v.src==='s' ? `<span class="src s">補充</span>` : ''; }
 const infoHTML = u => (u.n||u.w) ? `<span class="assoc"><b>正常值</b>　${esc(u.n)}<br><b>用途</b>　${esc(u.w)}</span>` : '';
-const assocHTML = u => u.a ? `<span class="assoc">${srcTag({src:u.as})}→ ${esc(u.a)}</span>` : '';
+const TL = [['pu','目的'],['how','做法'],['nor','正常'],['pos','陽性'],['cmp','對照'],['why','原理']];
+const testHTML = u => `<span class="assoc tst">${TL.filter(([k])=>u[k]).map(([k,l])=>`<b>${l}</b>　${esc(u[k])}`).join('<br>')}</span>`;
+const assocHTML = u => (u.how||u.nor||u.pu||u.pos) ? testHTML(u) : u.a ? `<span class="assoc">${srcTag({src:u.as})}→ ${esc(u.a)}</span>` : '';
+function mskBoardHTML(sec, ph){
+  const t=esc(sec.mapTitle||'結構對照');
+  if(ph!=='reveal') return `<aside class="board"><h2>${t}</h2><p class="wait">現場討論完再出現。</p></aside>`;
+  return `<aside class="board"><h2>${t}</h2>${(sec.map||[]).map(([k,v])=>`<div class="dx"><b>${esc(k)}</b><p class="why">${esc(v)}</p></div>`).join('')||'<p class="wait">重點在左邊的教案推理。</p>'}</aside>`;
+}
 
 /* ---------- presenter ---------- */
 function renderTA(){
   const i=S.live.sec, sec=SECTIONS[i], ph=S.live.phase, a=agg();
   const marks=S.taMarks[sec.id]||new Set();
-  const steps=SECTIONS.map((s,k)=>`<button class="${k===i?'on':k<i?'done':''}" data-act="go" data-sec="${k}">${esc(s.title.split('・')[0])}</button>`).join('');
+  const course=courseOf(i), ids=secsOf(course), last=ids[ids.length-1];
+  const steps=ids.map(k=>`<button class="${k===i?'on':k<i?'done':''}" data-act="go" data-sec="${k}">${esc(SECTIONS[k].short||SECTIONS[k].title.split('・')[0])}</button>`).join('');
+  const courseSeg=`<span class="seg">${Object.keys(COURSES).map(c=>`<button class="${c===course?'on':''}" data-act="course" data-course="${c}">${COURSES[c].tab}</button>`).join('')}</span>`;
   const segs=phasesOf(i).map(p=>`<button class="${p===ph?'on':''}" data-act="phase" data-phase="${p}">${PH[p]}</button>`).join('');
   const conn = S.roomOk ? `<span class="pill"><span class="dot ok"></span>學生在線 <b class="mono">${a.online}</b>　本段作答 <b class="mono">${a.n}</b></span>`
                         : `<span class="pill"><span class="dot"></span>未連上即時互動</span>`;
@@ -505,7 +696,7 @@ function renderTA(){
   if(sec.units && ph!=='want'){
     const shown=S.shown[sec.id]||new Set();
     const prompt = ph==='ask' ? `逐項問大家：${sec.askHint||'這讓你聯想到什麼？'}點一項，顯示教案的聯想。<button class="btn" data-act="showall" style="margin-left:8px">${shown.size?'全部收起':'全部顯示'}</button>` : ph==='clue' ? `${sec.abn?'請大家點出異常的項目。':'請大家點出關鍵線索。'}${S.roomOk?'越多人點，底色越深。':''}點畫面上的句子可以由助教直接標記。`
-                 : ph==='ddx' ? (phasesOf(i).includes('clue') ? '線索找完了：' : '看完這段，') + '請大家調整右側每個診斷的可能性。'+(sec.info?'點檢驗項目可看正常值與用途。':'') : (sec.abn?'框線＝異常項目。':'框線＝教案推理用到的線索。');
+                 : ph==='ddx' ? (phasesOf(i).includes('clue') ? '線索找完了：' : '看完這段，') + '請助教邊講邊在右側看板排每個診斷：上調、持平、下調。學生手機會同步顯示。'+(sec.info?'點檢驗項目可看正常值與用途。':'') : (sec.rev || (sec.abn?'框線＝異常項目。':'框線＝教案推理用到的線索。'));
     body = unitsWrap(sec, eachUnit(sec, u=>{
       const c=a.clue[u.id]||0, frac=a.n?c/a.n:0, ta=marks.has(u.id);
       const pct=Math.round(Math.max(a.n?frac:0, ta?.6:0)*70);
@@ -516,13 +707,14 @@ function renderTA(){
     }));
     body = `<p class="prompt">${prompt}</p>${body}`;
   }
-  if(i===0 && ph==='ask') body += `<div class="qrbox"><div id="qr" class="qr"></div><div><b>掃描加入，用手機一起作答</b><br><span class="muted">${SITE_URL.replace('https://','')}</span></div></div>`;
+  if((i===0||sec.qr) && ph==='ask') body += `<div class="qrbox"><div id="qr" class="qr"></div><div><b>掃描加入，用手機一起作答</b><br><span class="muted">${SITE_URL.replace('https://','')}</span></div></div>`;
   if(ph==='reveal') body += analysisHTML(sec);
   body += cardsHTML(sec,'p:');
-  const nextLabel = (()=>{ const ps=phasesOf(i), k=ps.indexOf(ph); if(k<ps.length-1) return PH[ps[k+1]]+' →'; return i<SECTIONS.length-1?'下一段 →':''; })();
+  const nextLabel = (()=>{ const ps=phasesOf(i), k=ps.indexOf(ph); if(k<ps.length-1) return PH[ps[k+1]]+' →'; return i<last?'下一段 →':''; })();
   return `
   <header class="bar">
-    <span class="brand">寡尿 · 臨床推理</span>
+    <span class="brand">${COURSES[course].brand}</span>
+    ${courseSeg}
     <nav class="steps">${steps}</nav>
     <span class="seg">${segs}</span>
     <span class="spacer"></span>
@@ -538,13 +730,13 @@ function renderTA(){
       ${body}
       <div class="selfnav"><button class="btn" data-act="prev">← 上一步</button>${nextLabel?`<button class="btn primary" data-act="next">${nextLabel}</button>`:''}</div>
     </section>
-    ${boardHTML(i, ph, a)}
+    ${hasDx(sec) ? boardHTML(i, ph, a) : mskBoardHTML(sec, ph)}
   </main>`;
 }
 
 function boardHTML(i, ph, a){
   const prev=statusAfter(i-1), cur=statusAfter(i), reveal=ph==='reveal', verdict=SECTIONS[i].verdict||{};
-  const showVotes = ph==='ddx' && Object.keys(a.vote).length>0;
+  const tam=taMarksDx(), canMark = ph==='ddx' && S.role==='ta' && !S.preview;
   const live=[], gone=[];
   for(const d of dxAt(i)){
     const before=prev[d]?.s||'open';
@@ -555,8 +747,8 @@ function boardHTML(i, ph, a){
   const rows = treeOrder(live, d=>(reveal?cur:prev)[d]?.s||'open').map(({d,hd,depth})=>{
     if(hd) return `<div class="subhd">${esc(hd)}</div>`;
     const st=(reveal?cur:prev)[d]?.s||'open', v=verdict[d], changed=reveal&&v;
-    const vt=a.vote[d], tot=vt?vt.u+vt.k+vt.d:0;
-    const bars = showVotes&&tot ? `<div class="bars">${['u','k','d'].map(x=>vt[x]?`<span class="b${x}" style="width:${vt[x]/tot*100}%">${VLAB[x]} ${vt[x]}</span>`:'').join('')}</div>`:'';
+    const mk=tam[d];
+    const bars = ph==='ddx' ? `<span class="vbtns" style="margin:6px 0 0">${['u','k','d'].map(x=>canMark?`<button class="${x} ${mk===x?'on':''}" data-act="tadx" data-dx="${d}" data-v="${x}">${VLAB[x]}</button>`:(mk===x?`<button class="${x} on" disabled>${VLAB[x]}</button>`:'')).join('')}</span>`:'';
     const isNew = DX[d].intro===i && i>0;
     return `<div class="dx ${depth?'child':''}${st==='out'?'out':''} ${changed?'changed':''}">
       <div class="dx-top"><button class="dxname" data-act="open" data-k="d:${d}">${esc(DX[d].name)}</button>${isNew?'<span class="new">新</span>':''}<span class="chip ${st}">${ST[st]}</span></div>
@@ -568,7 +760,6 @@ function boardHTML(i, ph, a){
   return `<aside class="board">
     <h2>鑑別診斷看板</h2>
     <p class="sub">${reveal?'底色＝這一段改變了判斷':'上一段結束時的判斷'}。點病名看說明。</p>
-    ${showVotes?`<div class="legend"><span><i style="background:var(--up)"></i>↑ 上調</span><span><i style="background:var(--out)"></i>持平</span><span><i style="background:var(--down)"></i>↓ 下調</span></div>`:''}
     ${rows}
     ${gone.length?`<p class="past">已排除：${gone.map(d=>`${esc(DX[d].name)}（${esc(prev[d].why)}）`).join('；')}</p>`:''}
   </aside>`;
@@ -577,7 +768,7 @@ function boardHTML(i, ph, a){
 /* ---------- student ---------- */
 function renderST(){
   const i=S.live.sec, sec=SECTIONS[i], ph=S.live.phase;
-  const picks=new Set(S.mine.picks[sec.id]||[]), votes=S.mine.votes[sec.id]||{};
+  const picks=new Set(S.mine.picks[sec.id]||[]);
   let body=statementHTML(sec, ph);
   if(sec.units && ph!=='want'){
     const F=sec.abn?'ab':'key';
@@ -595,24 +786,26 @@ function renderST(){
       return `<button class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${ph==='reveal'&&clued?(u[F]?(p?'<span class="mk">✓</span>':'<span class="mk">漏</span>'):(p?'<span class="mk">多點</span>':'')):''}${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&sh?infoHTML(u):''}${figHTML(u)}</button>`;
     }));
   }
-  if(ph==='ddx' || (ph==='reveal' && sec.units)){
+  if(hasDx(sec) && (ph==='ddx' || (ph==='reveal' && sec.units))){
     const prev=statusAfter(i-1), verdict=sec.verdict||{};
     const list=dxAt(i).filter(d=>(prev[d]?.s)!=='out');
-    body += `<div style="margin-top:20px">${ph==='ddx'?'<p class="prompt">每個診斷按一下：上調（變可能）、持平、下調（變不可能，含排除）。不按＝還沒表態。</p>':`<h3 style="font-size:15px;margin:0 0 4px">你的判斷 vs 教案<span class="tally">${(()=>{const a=list.filter(d=>votes[d]);const ok=a.filter(d=>votes[d]===(verdict[d]?VOTE_OF[verdict[d].s]:'k')).length;return a.length?`一致 ${ok} / ${a.length}`:'你這段沒有表態';})()}</span></h3>`}`
+    const tam=taMarksDx();
+    body += `<div style="margin-top:20px">${ph==='ddx'?'<p class="prompt">助教正在帶著排鑑別：上調（變可能）、持平、下調（變不可能）。跟著聽就好。</p>':`<h3 style="font-size:15px;margin:0 0 4px">教案的判斷</h3>`}`
       + treeOrder(list, d=>prev[d]?.s||'open').map(({d,hd,depth})=>{
         if(hd) return `<div class="subhd">${esc(hd)}</div>`;
-        const mine=votes[d], v=verdict[d], exp=v?VOTE_OF[v.s]:'k', res=!mine?'none':(mine===exp?'ok':'bad'), rc=ph==='reveal'?' r-'+res:'';
-        const btns = ph==='ddx' ? `<span class="vbtns">${['u','k','d'].map(x=>`<button class="${x} ${mine===x?'on':''}" data-act="vote" data-dx="${d}" data-v="${x}" aria-label="${ {u:'上調',k:'持平',d:'下調'}[x] }">${VLAB[x]}</button>`).join('')}</span>` : '';
-        const cmp = ph==='reveal' ? `<div class="cmp"><span class="res ${res}">${{ok:'✓ 一致',bad:'✗ 不一致',none:'未表態'}[res]}</span>　你：<b>${mine?VLAB[mine]:'—'}</b>　教案：<b>${v?ST[v.s]:'持平'}</b></div>${v&&(res==='bad'||S.dxOpen.has(d))?`<p class="why">${srcTag(v)}${esc(v.why)}</p>`:''}` : '';
+        const mine=tam[d], v=verdict[d], rc='';
+        const btns = ph==='ddx' ? (mine?`<span class="vbtns"><button class="${mine} on" disabled>${VLAB[mine]}</button></span>`:'<span class="vbtns muted" style="font-size:13px">助教還沒排</span>') : `<span class="chip ${v?v.s:'open'}">${v?ST[v.s]:'持平'}</span>`;
+        const cmp = ph==='reveal' && v ? `<p class="why">${srcTag(v)}${esc(v.why)}</p>` : '';
         return `<div class="vote ${depth?'child':''}${rc}"><div class="vote-top"><button class="dxname" data-act="open" data-k="d:${d}">${esc(DX[d].name)}</button>${DX[d].intro===i&&i>0?'<span class="new">新</span>':''}${btns}</div>${cmp}${S.dxOpen.has(d)?`<p class="dxcard">${esc(DX[d].card)}</p>`:''}</div>`;
       }).join('') + '</div>';
   }
-  if(ph==='reveal') body += analysisHTML(sec);
+  if(ph==='reveal') body += analysisHTML(sec) + (hasDx(sec)?'':mapHTML(sec));
   body += cardsHTML(sec,'p:');
+  const ids=secsOf(courseOf(i));
   const nav = S.follow ? '' : `<div class="selfnav"><button class="btn" data-act="prev">← 上一步</button><button class="btn primary" data-act="next">下一步 →</button></div>`;
   const status = S.follow ? `<span class="pill"><span class="dot ok"></span>跟著助教進度</span>` : `<span class="pill"><span class="dot"></span>自己瀏覽</span>`;
   return `<div class="phone">
-    <header class="bar"><span class="brand">寡尿 · 臨床推理</span>${(S.role==='st'&&!S.preview&&S.rt)?'<button class="btn" data-act="talogin" style="margin-left:8px">TA 登入</button>':''}<span class="spacer"></span>${status}${S.preview?'<button class="btn" data-act="preview">回主持畫面</button>':''}</header>
+    <header class="bar"><span class="brand">${COURSES[courseOf(i)].brand}</span>${(S.role==='st'&&!S.preview&&S.rt)?'<button class="btn" data-act="talogin" style="margin-left:8px">TA 登入</button>':''}<span class="spacer"></span>${status}${S.preview?'<button class="btn" data-act="preview">回主持畫面</button>':''}</header>
     ${S.note?`<div class="note">${esc(S.note)}</div>`:''}
     ${!S.roomOk&&!S.preview?'<div class="note">你的作答只會留在這支手機上，不會出現在投影幕。</div>':''}
     <section class="sheet">
@@ -622,7 +815,7 @@ function renderST(){
       ${body}
       ${nav}
     </section>
-    <p class="foot">第 ${i+1} / ${SECTIONS.length} 段</p>
+    <p class="foot">第 ${ids.indexOf(i)+1} / ${ids.length} 段</p>
     <p class="foot mono" style="opacity:.7" ${location.hash==='#debug'?'':'hidden'}>連線檢查：執行環境 ${S.rt?'✓':'✗'}　即時 ${S.roomOk?'✓':'✗'}　資料庫 ${S.db?'✓':'✗'}　在線 ${S.peers.length}　助教訊號 ${(S.roomLive||S.dbLive)?'✓':'✗'}</p>
   </div>`;
 }
@@ -638,14 +831,14 @@ function schedule(){ if(!raf) raf=requestAnimationFrame(render); }
 function pushPresence(){
   if(!S.room || S.role!=='st') return;
   const id=SECTIONS[S.live.sec].id;
-  S.room.presence({r:'s', s:id, c:S.mine.picks[id]||[], v:S.mine.votes[id]||{}}).catch(()=>{});
+  S.room.presence({r:'s', s:id, c:S.mine.picks[id]||[]}).catch(()=>{});
 }
 
 let writing=false, dirty=false;
 async function writeLive(){
   if(!S.db) return; dirty=true; if(writing) return; writing=true;
   while(dirty){ dirty=false;
-    try{ await S.db.doc('live/state').set({sec:S.live.sec, phase:S.live.phase}); S.docExists=true; S.note=''; }
+    try{ await S.db.doc('live/state').set({sec:S.live.sec, phase:S.live.phase, m:S.taDx[SECTIONS[S.live.sec].id]||{}}); S.docExists=true; S.note=''; }
     catch(e){ S.note='進度沒有同步到學生手機（'+((e&&e.code)||'錯誤')+'）。'; dirty=false; }
   }
   writing=false; schedule();
@@ -657,9 +850,9 @@ function go(sec, phase){
   render(); pushPresence(); window.scrollTo({top:0});
 }
 function step(dir){
-  const i=S.live.sec, ps=phasesOf(i), k=ps.indexOf(S.live.phase);
-  if(dir>0){ if(k<ps.length-1) go(i,ps[k+1]); else if(i<SECTIONS.length-1) go(i+1,phasesOf(i+1)[0]); }
-  else { if(k>0) go(i,ps[k-1]); else if(i>0){ const p=phasesOf(i-1); go(i-1,p[p.length-1]); } }
+  const i=S.live.sec, ps=phasesOf(i), k=ps.indexOf(S.live.phase), ids=secsOf(courseOf(i)), lo=ids[0], hi=ids[ids.length-1];
+  if(dir>0){ if(k<ps.length-1) go(i,ps[k+1]); else if(i<hi) go(i+1,phasesOf(i+1)[0]); }
+  else { if(k>0) go(i,ps[k-1]); else if(i>lo){ const p=phasesOf(i-1); go(i-1,p[p.length-1]); } }
 }
 const canNav = () => (S.role==='ta' && !S.preview) || !S.follow;
 
@@ -668,6 +861,7 @@ document.getElementById('app').addEventListener('click', e=>{
   const act=b.dataset.act, sec=SECTIONS[S.live.sec];
   if(act==='go' && canNav()) go(+b.dataset.sec, phasesOf(+b.dataset.sec)[0]);
   else if(act==='phase' && canNav()) go(S.live.sec, b.dataset.phase);
+  else if(act==='course' && canNav() && COURSES[b.dataset.course]){ const k=secsOf(b.dataset.course)[0]; go(k, phasesOf(k)[0]); }
   else if(act==='next' && canNav()) step(1);
   else if(act==='prev' && canNav()) step(-1);
   else if(act==='open' && b.dataset.k.startsWith('d:')){ const d=b.dataset.k.slice(2); S.dxOpen.has(d)?S.dxOpen.delete(d):S.dxOpen.add(d); render(); }
@@ -680,10 +874,10 @@ document.getElementById('app').addEventListener('click', e=>{
     const arr=new Set(S.mine.picks[sec.id]||[]); arr.has(b.dataset.u)?arr.delete(b.dataset.u):arr.add(b.dataset.u);
     S.mine.picks[sec.id]=[...arr]; saveMine(); render(); if(!S.preview) pushPresence();
   }
-  else if(act==='vote'){
-    const v=S.mine.votes[sec.id]=S.mine.votes[sec.id]||{}; const d=b.dataset.dx;
+  else if(act==='tadx' && S.role==='ta' && !S.preview){
+    const v=S.taDx[sec.id]=S.taDx[sec.id]||{}; const d=b.dataset.dx;
     if(v[d]===b.dataset.v) delete v[d]; else v[d]=b.dataset.v;
-    saveMine(); render(); if(!S.preview) pushPresence();
+    writeLive(); render();
   }
   else if(act==='talogin'){ if(window.__taLogin) window.__taLogin(); }
   else if(act==='preview'){ S.preview=!S.preview; render(); }
@@ -743,7 +937,7 @@ async function init(){
     got=true; clearTimeout(timer); if(S.note.startsWith('還連不上')) S.note='';
     const d=snap.exists?snap.data():null; S.docExists=!!snap.exists;
     if(S.role==='st'){ S.dbLive=validLive(d)?d:null; applyLive(); return; }
-    else if(validLive(d) && !writing && !dirty){ S.live={sec:d.sec,phase:d.phase}; }
+    else if(validLive(d) && !writing && !dirty){ S.live={sec:d.sec,phase:d.phase}; const mm=cleanMarks(d.m); if(Object.keys(mm).length||!S.taDx[SECTIONS[d.sec].id]) S.taDx[SECTIONS[d.sec].id]=mm; }
     schedule();
   }, err=>{ clearTimeout(timer); S.follow=false; S.note='讀不到助教的進度，先自己往下看。'; schedule(); });
   render();
