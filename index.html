@@ -736,19 +736,18 @@ function renderTA(){
 
 function boardHTML(i, ph, a){
   const prev=statusAfter(i-1), cur=statusAfter(i), reveal=ph==='reveal', verdict=SECTIONS[i].verdict||{};
-  const tam=taMarksDx(), canMark = ph==='ddx' && S.role==='ta' && !S.preview;
+  const tam=taMarksDx(), canMark = ph!=='reveal' && S.role==='ta' && !S.preview;
   const live=[], gone=[];
   for(const d of dxAt(i)){
     const before=prev[d]?.s||'open';
     if(before==='out'){ gone.push(d); continue; }
     live.push(d);
   }
-  if(ph==='ask'||ph==='want') return `<aside class="board"><h2>鑑別診斷看板</h2><p class="wait">現場討論完再出現。</p></aside>`;
   const rows = treeOrder(live, d=>(reveal?cur:prev)[d]?.s||'open').map(({d,hd,depth})=>{
     if(hd) return `<div class="subhd">${esc(hd)}</div>`;
     const st=(reveal?cur:prev)[d]?.s||'open', v=verdict[d], changed=reveal&&v;
     const mk=tam[d];
-    const bars = ph==='ddx' ? `<span class="vbtns" style="margin:6px 0 0">${['u','k','d'].map(x=>canMark?`<button class="${x} ${mk===x?'on':''}" data-act="tadx" data-dx="${d}" data-v="${x}">${VLAB[x]}</button>`:(mk===x?`<button class="${x} on" disabled>${VLAB[x]}</button>`:'')).join('')}</span>`:'';
+    const bars = ph!=='reveal' ? `<span class="vbtns" style="margin:6px 0 0">${['u','k','d'].map(x=>canMark?`<button class="${x} ${mk===x?'on':''}" data-act="tadx" data-dx="${d}" data-v="${x}">${VLAB[x]}</button>`:(mk===x?`<button class="${x} on" disabled>${VLAB[x]}</button>`:'')).join('')}</span>`:'';
     const isNew = DX[d].intro===i && i>0;
     return `<div class="dx ${depth?'child':''}${st==='out'?'out':''} ${changed?'changed':''}">
       <div class="dx-top"><button class="dxname" data-act="open" data-k="d:${d}">${esc(DX[d].name)}</button>${isNew?'<span class="new">新</span>':''}<span class="chip ${st}">${ST[st]}</span></div>
@@ -759,7 +758,7 @@ function boardHTML(i, ph, a){
   }).join('');
   return `<aside class="board">
     <h2>鑑別診斷看板</h2>
-    <p class="sub">${reveal?'底色＝這一段改變了判斷':'上一段結束時的判斷'}。點病名看說明。</p>
+    <p class="sub">${reveal?'底色＝這一段改變了判斷':(canMark?'邊討論邊排：上調、持平、下調，學生手機在「排鑑別」階段會同步。':'上一段結束時的判斷')}。點病名看說明。</p>
     ${rows}
     ${gone.length?`<p class="past">已排除：${gone.map(d=>`${esc(DX[d].name)}（${esc(prev[d].why)}）`).join('；')}</p>`:''}
   </aside>`;
