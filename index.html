@@ -41,6 +41,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .seg button+button{border-left:1px solid var(--rule)}
 .seg button.on{background:var(--heat);color:#2A1C00;font-weight:700}
 .seg button:disabled{opacity:.35;cursor:default}
+.course-sel{border:1px solid var(--rule);border-radius:8px;background:var(--sheet);color:inherit;padding:5px 8px;font-size:13px;font-family:inherit}
 .spacer{flex:1}
 .pill{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--out)}
@@ -688,7 +689,7 @@ function renderTA(){
   const marks=S.taMarks[sec.id]||new Set();
   const course=courseOf(i), ids=secsOf(course), last=ids[ids.length-1];
   const steps=ids.map(k=>`<button class="${k===i?'on':k<i?'done':''}" data-act="go" data-sec="${k}">${esc(SECTIONS[k].short||SECTIONS[k].title.split('・')[0])}</button>`).join('');
-  const courseSeg=`<span class="seg">${Object.keys(COURSES).map(c=>`<button class="${c===course?'on':''}" data-act="course" data-course="${c}">${COURSES[c].tab}</button>`).join('')}</span>`;
+  const courseSeg=`<select class="course-sel" data-act="course" aria-label="切換主題">${Object.keys(COURSES).map(c=>`<option value="${c}"${c===course?' selected':''}>${COURSES[c].tab}</option>`).join('')}</select>`;
   const segs=phasesOf(i).map(p=>`<button class="${p===ph?'on':''}" data-act="phase" data-phase="${p}">${PH[p]}</button>`).join('');
   const conn = S.roomOk ? `<span class="pill"><span class="dot ok"></span>學生在線 <b class="mono">${a.online}</b>　本段作答 <b class="mono">${a.n}</b></span>`
                         : `<span class="pill"><span class="dot"></span>未連上即時互動</span>`;
@@ -855,6 +856,11 @@ function step(dir){
 }
 const canNav = () => (S.role==='ta' && !S.preview) || !S.follow;
 
+document.getElementById('app').addEventListener('change', e=>{
+  const s=e.target.closest('select[data-act="course"]'); if(!s) return;
+  if(canNav() && COURSES[s.value]){ const k=secsOf(s.value)[0]; go(k, phasesOf(k)[0]); }
+  else render && render();
+});
 document.getElementById('app').addEventListener('click', e=>{
   const b=e.target.closest('[data-act]'); if(!b) return;
   const act=b.dataset.act, sec=SECTIONS[S.live.sec];
@@ -906,9 +912,6 @@ async function init(){
   firebase.initializeApp(cfg);
   const auth=firebase.auth(), rtdb=firebase.database();
   if(location.hash==='#logout'){ await auth.signOut(); location.hash=''; }
-  /* 助教登入只活到下一次重整：重整（不是剛登入造成的那次）就先登出，#ta 會再跳出登入畫面 */
-  try{ const nav=(performance.getEntriesByType('navigation')[0]||{}).type; const fresh=sessionStorage.getItem('taFresh'); sessionStorage.removeItem('taFresh');
-    if(nav==='reload' && !fresh && location.hash==='#ta') await auth.signOut(); }catch(_){}
   let user=await new Promise(res=>{ const un=auth.onAuthStateChanged(u=>{ un(); res(u); }); });
   if(!user){ try{ user=(await auth.signInAnonymously()).user; }catch(e){ S.note='無法連線（'+(e.code||'錯誤')+'），先自己往下看。'; if(location.hash==='#ta') showLogin(auth); render(); return; } }
   const teacher=!user.isAnonymous, uid=user.uid;
