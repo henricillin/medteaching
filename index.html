@@ -842,7 +842,6 @@ function boardHTML(i, ph, a){
     };
     return `<aside class="board">
     <h2>鑑別診斷看板</h2>
-    <p class="sub">${reveal?'箭頭與理由＝這一段改變了判斷':(canMark?'邊討論邊排：按上調、下調，那一列會移到對應的層；學生手機在「排鑑別」階段會同步':'上一段結束時的判斷')}。點病名看說明。</p>
     ${impHTML(impAt(reveal?i:i-1))}
     ${reveal ? tierRevealHTML(i, live) + diffHTML(i, live, tam) : tierLiveHTML(i, live, prev, tam, row)}
     ${goneHTML(gone, prev)}
@@ -864,9 +863,8 @@ function boardHTML(i, ph, a){
   }).join('');
   return `<aside class="board">
     <h2>鑑別診斷看板</h2>
-    <p class="sub">${reveal?'底色＝這一段改變了判斷':(canMark?'邊討論邊排：上調、持平、下調，學生手機在「排鑑別」階段會同步。':'上一段結束時的判斷')}。點病名看說明。</p>
     ${impHTML(impAt(reveal?i:i-1))}
-    <p class="listhd">${reveal?'鑑別清單（標「排除」的，下一段起不再出現）':'仍在鑑別'}</p>
+    <p class="listhd">${reveal?'鑑別清單':'仍在鑑別'}</p>
     ${rows}
   </aside>`;
 }
