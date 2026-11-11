@@ -2,6 +2,6 @@
   "hosting": {
     "site": "medteaching",
     "public": ".",
-    "ignore": ["firebase.json", ".firebaserc", "database.rules.json", "README.md", "**/.*", "**/node_modules/**"]
+    "ignore": ["firebase.json", ".firebaserc", "database.rules.json", "README.md", "**/.*", "**/.*/**", "**/node_modules/**", "**/*.md", "**/*.pdf", "**/*.pptx"]
   }
 }
