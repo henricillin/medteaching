@@ -228,7 +228,7 @@ const SECTIONS = [
   <li><b>腎後性</b>：泌尿道阻塞。女性要想到婦科：子宮肌瘤或懷孕壓迫雙側輸尿管（多半只壓單側）；年輕女性，癌症壓迫機會較低。</li></ul>`},
 
 { id:'hpi', no:'(2-1)', title:'現病史', layout:'prose',
-  imp:['腎因性：腎絲球受損（子癲前症 vs 腎絲球腎炎）'], impNote:'合併心衰竭症狀，要想多重器官同時受影響的疾病。',
+  imp:['寡尿，偏腎因性：腎絲球受損（子癲前症 vs 腎絲球腎炎）','疑似心衰竭（走路喘、躺下更喘、雙下肢水腫）','懷孕 26 週，多個器官同時受影響：要想系統性疾病'],
   units:[
     {id:'h1',t:'28 歲女性，懷孕 26 週',key:1},
     {id:'h2',t:'一個月前開始出現泡泡尿',key:1},
@@ -257,7 +257,7 @@ const SECTIONS = [
   <li>合併<b>心臟衰竭症狀</b>，但年輕女性心肌梗塞機會很小，也沒有常見的上呼吸道病毒感染症狀；再加上泡泡尿，很可能是<b>多重器官系統同時被影響</b>的疾病。</li></ol>`},
 
 { id:'pmh', no:'(2-2)', title:'過去病史・家族史・系統回顧', layout:'list',
-  imp:['懷孕相關的血栓性微血管病變：aHUS、TTP','自體免疫疾病：SLE、APS'], impNote:'子癲前症下調但還沒排除。', phases:['want','ask','ddx','reveal'], want:['還想追問哪些過去病史、用藥、家族史？','系統回顧（ROS）想問哪些症狀？每一項是為了排除或支持哪個診斷？'], assoc:1,
+  imp:['腎衰竭＋持續溶血性貧血：懷孕相關的血栓性微血管病變（aHUS、TTP）','自體免疫疾病待排除：SLE、APS','心衰竭症狀（胸悶、心悸、端坐呼吸、體重增加 16 kg）'], impNote:'子癲前症下調但還沒排除。', phases:['want','ask','ddx','reveal'], want:['還想追問哪些過去病史、用藥、家族史？','系統回顧（ROS）想問哪些症狀？每一項是為了排除或支持哪個診斷？'], assoc:1,
   askHint:'每一項讓你聯想到什麼？對診斷有什麼幫助？',
   units:[
     {id:'p1',g:'過去病史',t:'第一胎不明原因流產',a:'懷孕相關的系統性疾病：子癲前症？抗磷脂質症候群？先記下來，往下看能不能解釋。',as:'t'},
@@ -301,7 +301,7 @@ const SECTIONS = [
   <li>重點：年輕孕婦 26 週出現<b>急性腎衰竭＋心臟衰竭</b>，可能合併呼吸衰竭，神經、腸胃、視力也受影響。若不是子癲前症，重要鑑別有：SLE、APS、TTP、HELLP、AFLP。</li></ol>`},
 
 { id:'pe', no:'(3)', title:'身體檢查', layout:'list',
-  imp:['血栓性微血管病變（溶血＋血小板低下＋器官受損）：TTP、aHUS 為首'], impNote:'腎前性只下調：血壓高排除休克，但心衰竭仍可能讓腎灌流不足。', abn:1, phases:['want','clue','ddx','reveal'], want:['你會做哪些身體檢查？','先看哪些生命徵象？每項是想確認什麼？'],
+  imp:['血栓性微血管病變（溶血＋血小板低下＋器官受損）：TTP、aHUS 為首','急性心衰竭合併肺水腫（SpO₂ 88%、頸靜脈怒張、雙側濕囉音）','急性腎損傷（寡尿），不是休克造成'], impNote:'補充：腎前性只下調，血壓高排除休克，但心衰竭仍可能讓腎灌流不足。', abn:1, phases:['want','clue','ddx','reveal'], want:['你會做哪些身體檢查？','先看哪些生命徵象？每項是想確認什麼？'],
   units:[
     {id:'e1',t:'神智清醒'},
     {id:'e2',t:'BT 36.7 ℃'},
@@ -334,7 +334,7 @@ const SECTIONS = [
   <p>病況不穩定，考慮的鑑別診斷都會危及生命，要盡快抽血與影像檢查。</p>`},
 
 { id:'lab', no:'(4)', title:'實驗室數據', layout:'list',
-  imp:['aHUS','SLE 相關的血栓性微血管病變','APS'], impNote:'已確定是 TMA；DIC、AIHA、HELLP、AFLP、TTP、典型 HUS 有決定性數據，排除。', data:1, abn:1, info:1, phases:['want','clue','ddx','reveal'], want:['你會先抽哪些血、驗哪些項目？','每一項是想排除或支持哪個診斷？'],
+  imp:['血栓性微血管病變（MAHA＋血小板低下）：aHUS > SLE、APS','嚴重急性腎損傷合併代謝性酸中毒（BUN 223、Cr 15.92、pH 7.10）','心肌受損（Troponin I 1.3 → 5.66）'], impNote:'DIC、AIHA、HELLP、AFLP、TTP、典型 HUS 有決定性數據，排除。', data:1, abn:1, info:1, phases:['want','clue','ddx','reveal'], want:['你會先抽哪些血、驗哪些項目？','每一項是想排除或支持哪個診斷？'],
   units:[
     {id:'l1',n:"7–20 mg/dL",w:"腎功能指標，腎臟排不掉時尿素氮會堆積。",ab:1,g:'腎功能・電解質・酸鹼',t:'BUN 223 mg/dL',key:1},
     {id:'l2',n:"女性約 0.5–1.1 mg/dL",w:"腎臟過濾能力的指標，越高代表腎功能越差。",ab:1,t:'Cr 15.92 mg/dL',key:1},
@@ -383,7 +383,7 @@ const SECTIONS = [
   <p>剩下：<b>SLE、APS、aHUS</b>。不論是哪一個，她已是嚴重 TMA 合併多重器官衰竭，接下來除了找病因，還要知道每個器官受威脅的程度。</p>`},
 
 { id:'img', no:'(5)', title:'影像與其他檢查', layout:'list',
-  imp:['aHUS','SLE 相關的血栓性微血管病變','APS'], impNote:'沒有水腎，腎後性排除；影像無法區分三者，要等抗體。', phases:['want','clue','ddx','reveal'], want:['你會安排哪些影像或其他檢查？','想看什麼？為什麼？'],
+  imp:['血栓性微血管病變：aHUS > SLE、APS（影像無法區分，要等抗體）','急性心衰竭（LVEF 17.9%、多導程 ST 上升）合併肺水腫、呼吸衰竭','急性腎損傷：腎臟大小正常、沒有水腎'], impNote:'腎後性排除。另有胎兒胎心音消失、眼底 cotton wool spots。', phases:['want','clue','ddx','reveal'], want:['你會安排哪些影像或其他檢查？','想看什麼？為什麼？'],
   units:[
     {id:'i1',t:'EKG：多導程 ST 段上升',key:1},
     {id:'i2',t:'Cardiac echo：LVEF 17.9%，global akinesis',key:1},
@@ -408,7 +408,7 @@ const SECTIONS = [
   <li>眼底鏡證明視力影響也是 <b>TMA</b> 造成。</li></ol>`},
 
 { id:'plan', no:'(6–7)', title:'評估與計畫',
-  imp:['aHUS（等自體抗體結果與血漿置換反應）','SLE','APS'],
+  imp:['懷孕相關的血栓性微血管病變，最可能 aHUS（等自體抗體與血漿置換反應；SLE、APS 待排除）','急性心衰竭合併急性呼吸衰竭','急性腎損傷合併嚴重代謝性酸中毒：緊急透析'], impNote:'另有眼睛受影響、胎兒死亡。',
   verdict:{
     ahus:{s:'lead',src:'t',why:'目前很可能為 aHUS；若自體抗體皆陰性、血漿置換四次溶血仍未改善，即可確定。'},
     sle:{s:'keep',src:'t',why:'等待 dsDNA、anti-Sm、anti-RNP、anti-SSA/SSB、C3/C4。'},
