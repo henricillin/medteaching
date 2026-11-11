@@ -142,6 +142,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .legend{display:flex;gap:12px;font-size:13px;color:var(--muted);margin:2px 0 8px;flex-wrap:wrap}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
 .past{font-size:13px;color:var(--out);border-top:1px solid var(--rule);padding-top:8px;margin-top:4px}
+.imp{border:1.5px solid var(--ink);border-radius:8px;padding:8px 12px;margin:8px 0 12px}
+.imp h3{font-size:13px;letter-spacing:.08em;margin:0 0 4px}
+.imp ol{margin:0;padding-left:1.4em;font-weight:700;line-height:1.6}
+.imp .note{font-size:13px;color:var(--muted);font-weight:400;margin:4px 0 0;padding:0;background:none;border:0}
+.listhd{font-size:13px;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:6px 0 2px}
 
 /* student */
 .phone{max-width:600px;margin:0 auto}
@@ -205,6 +210,7 @@ const DX = {
 
 const SECTIONS = [
 { id:'cc', no:'(1)', title:'主訴', phases:['ask','reveal'],
+  imp:['腎前性','腎因性','腎後性'], impNote:'資料太少，三個方向都還在，先不排序。',
   statement:'28 歲女性，尿量變少三天',
   ask:['你會先確認什麼？','可能的鑑別診斷有哪些？'],
   cards:[
@@ -222,6 +228,7 @@ const SECTIONS = [
   <li><b>腎後性</b>：泌尿道阻塞。女性要想到婦科：子宮肌瘤或懷孕壓迫雙側輸尿管（多半只壓單側）；年輕女性，癌症壓迫機會較低。</li></ul>`},
 
 { id:'hpi', no:'(2-1)', title:'現病史', layout:'prose',
+  imp:['腎因性：腎絲球受損（子癲前症 vs 腎絲球腎炎）'], impNote:'合併心衰竭症狀，要想多重器官同時受影響的疾病。',
   units:[
     {id:'h1',t:'28 歲女性，懷孕 26 週',key:1},
     {id:'h2',t:'一個月前開始出現泡泡尿',key:1},
@@ -249,7 +256,8 @@ const SECTIONS = [
   <li>懷孕婦女出現泡泡尿，要考量潛在的<b>腎因性</b>疾病：懷孕改變免疫平衡，可能讓腎絲球疾病（SLE、IgA 腎病、其他腎絲球腎炎）變得不穩定。也要確認是否有新的高血壓，因為懷孕 20 週以上出現高血壓與蛋白尿，最常見原因之一是<b>子癲前症</b>。</li>
   <li>合併<b>心臟衰竭症狀</b>，但年輕女性心肌梗塞機會很小，也沒有常見的上呼吸道病毒感染症狀；再加上泡泡尿，很可能是<b>多重器官系統同時被影響</b>的疾病。</li></ol>`},
 
-{ id:'pmh', no:'(2-2)', title:'過去病史・家族史・系統回顧', layout:'list', phases:['want','ask','ddx','reveal'], want:['還想追問哪些過去病史、用藥、家族史？','系統回顧（ROS）想問哪些症狀？每一項是為了排除或支持哪個診斷？'], assoc:1,
+{ id:'pmh', no:'(2-2)', title:'過去病史・家族史・系統回顧', layout:'list',
+  imp:['懷孕相關的血栓性微血管病變：aHUS、TTP','自體免疫疾病：SLE、APS'], impNote:'子癲前症下調但還沒排除。', phases:['want','ask','ddx','reveal'], want:['還想追問哪些過去病史、用藥、家族史？','系統回顧（ROS）想問哪些症狀？每一項是為了排除或支持哪個診斷？'], assoc:1,
   askHint:'每一項讓你聯想到什麼？對診斷有什麼幫助？',
   units:[
     {id:'p1',g:'過去病史',t:'第一胎不明原因流產',a:'懷孕相關的系統性疾病：子癲前症？抗磷脂質症候群？先記下來，往下看能不能解釋。',as:'t'},
@@ -292,7 +300,8 @@ const SECTIONS = [
   <li>頭暈：已規律服用 B 群、葉酸、鐵劑，也沒有腸胃道出血證據 → 考慮<b>溶血性貧血加重</b>。視力模糊 → 除了腎、心臟、腸胃，<b>腦神經與眼睛</b>可能也被影響。</li>
   <li>重點：年輕孕婦 26 週出現<b>急性腎衰竭＋心臟衰竭</b>，可能合併呼吸衰竭，神經、腸胃、視力也受影響。若不是子癲前症，重要鑑別有：SLE、APS、TTP、HELLP、AFLP。</li></ol>`},
 
-{ id:'pe', no:'(3)', title:'身體檢查', layout:'list', abn:1, phases:['want','clue','ddx','reveal'], want:['你會做哪些身體檢查？','先看哪些生命徵象？每項是想確認什麼？'],
+{ id:'pe', no:'(3)', title:'身體檢查', layout:'list',
+  imp:['血栓性微血管病變（溶血＋血小板低下＋器官受損）：TTP、aHUS 為首'], impNote:'腎前性只下調：血壓高排除休克，但心衰竭仍可能讓腎灌流不足。', abn:1, phases:['want','clue','ddx','reveal'], want:['你會做哪些身體檢查？','先看哪些生命徵象？每項是想確認什麼？'],
   units:[
     {id:'e1',t:'神智清醒'},
     {id:'e2',t:'BT 36.7 ℃'},
@@ -324,7 +333,8 @@ const SECTIONS = [
   <li>四肢許多瘀點 → 已出現<b>血小板低下</b>，是血栓性微血管病變的表現之一；結膜蒼白＋黃疸代表<b>溶血性貧血加重</b>。</li></ol>
   <p>病況不穩定，考慮的鑑別診斷都會危及生命，要盡快抽血與影像檢查。</p>`},
 
-{ id:'lab', no:'(4)', title:'實驗室數據', layout:'list', data:1, abn:1, info:1, phases:['want','clue','ddx','reveal'], want:['你會先抽哪些血、驗哪些項目？','每一項是想排除或支持哪個診斷？'],
+{ id:'lab', no:'(4)', title:'實驗室數據', layout:'list',
+  imp:['aHUS','SLE 相關的血栓性微血管病變','APS'], impNote:'已確定是 TMA；DIC、AIHA、HELLP、AFLP、TTP、典型 HUS 有決定性數據，排除。', data:1, abn:1, info:1, phases:['want','clue','ddx','reveal'], want:['你會先抽哪些血、驗哪些項目？','每一項是想排除或支持哪個診斷？'],
   units:[
     {id:'l1',n:"7–20 mg/dL",w:"腎功能指標，腎臟排不掉時尿素氮會堆積。",ab:1,g:'腎功能・電解質・酸鹼',t:'BUN 223 mg/dL',key:1},
     {id:'l2',n:"女性約 0.5–1.1 mg/dL",w:"腎臟過濾能力的指標，越高代表腎功能越差。",ab:1,t:'Cr 15.92 mg/dL',key:1},
@@ -372,7 +382,8 @@ const SECTIONS = [
   <p>→ 確認目前為<b>血栓性微血管病變（TMA）</b>，合併急性腎衰竭與心臟受影響。肝功能正常，先排除 AFLP、HELLP；ADAMTS13 80% 排除 TTP；Shiga toxin、O157:H7 陰性排除典型 HUS。</p>
   <p>剩下：<b>SLE、APS、aHUS</b>。不論是哪一個，她已是嚴重 TMA 合併多重器官衰竭，接下來除了找病因，還要知道每個器官受威脅的程度。</p>`},
 
-{ id:'img', no:'(5)', title:'影像與其他檢查', layout:'list', phases:['want','clue','ddx','reveal'], want:['你會安排哪些影像或其他檢查？','想看什麼？為什麼？'],
+{ id:'img', no:'(5)', title:'影像與其他檢查', layout:'list',
+  imp:['aHUS','SLE 相關的血栓性微血管病變','APS'], impNote:'沒有水腎，腎後性排除；影像無法區分三者，要等抗體。', phases:['want','clue','ddx','reveal'], want:['你會安排哪些影像或其他檢查？','想看什麼？為什麼？'],
   units:[
     {id:'i1',t:'EKG：多導程 ST 段上升',key:1},
     {id:'i2',t:'Cardiac echo：LVEF 17.9%，global akinesis',key:1},
@@ -397,6 +408,7 @@ const SECTIONS = [
   <li>眼底鏡證明視力影響也是 <b>TMA</b> 造成。</li></ol>`},
 
 { id:'plan', no:'(6–7)', title:'評估與計畫',
+  imp:['aHUS（等自體抗體結果與血漿置換反應）','SLE','APS'],
   verdict:{
     ahus:{s:'lead',src:'t',why:'目前很可能為 aHUS；若自體抗體皆陰性、血漿置換四次溶血仍未改善，即可確定。'},
     sle:{s:'keep',src:'t',why:'等待 dsDNA、anti-Sm、anti-RNP、anti-SSA/SSB、C3/C4。'},
@@ -608,6 +620,9 @@ function statementHTML(sec, ph){
 }
 function statusAfter(i){ const m={}; for(let k=0;k<=i;k++){ const v=SECTIONS[k].verdict||{}; for(const d in v) m[d]={...v[d],sec:k}; } return m; }
 const dxAt = i => Object.keys(DX).filter(d => DX[d].intro <= i);
+/* Impression＝這一段結束時最能解釋全部發現的 1–3 個工作診斷；排除＝有決定性證據，排除後下一段起不再出現 */
+const impAt = i => { for(let k=i;k>=0;k--) if(SECTIONS[k].imp) return SECTIONS[k]; return null; };
+const impHTML = s => s ? `<div class="imp"><h3>IMPRESSION</h3><ol>${s.imp.map(t=>`<li>${esc(t)}</li>`).join('')}</ol>${s.impNote?`<p class="note">${esc(s.impNote)}</p>`:''}</div>` : '';
 /* 第一層＝腎臟哪裡出問題；第二層＝什麼病造成的 */
 const TREE = [
   {d:'prerenal'},
@@ -767,8 +782,9 @@ function boardHTML(i, ph, a){
   return `<aside class="board">
     <h2>鑑別診斷看板</h2>
     <p class="sub">${reveal?'底色＝這一段改變了判斷':(canMark?'邊討論邊排：上調、持平、下調，學生手機在「排鑑別」階段會同步。':'上一段結束時的判斷')}。點病名看說明。</p>
+    ${impHTML(impAt(reveal?i:i-1))}
+    <p class="listhd">${reveal?'鑑別清單（標「排除」的，下一段起不再出現）':'仍在鑑別'}</p>
     ${rows}
-    ${gone.length?`<p class="past">已排除：${gone.map(d=>`${esc(DX[d].name)}（${esc(prev[d].why)}）`).join('；')}</p>`:''}
   </aside>`;
 }
 
@@ -795,7 +811,7 @@ function renderST(){
     const prev=statusAfter(i-1), verdict=sec.verdict||{};
     const list=dxAt(i).filter(d=>(prev[d]?.s)!=='out');
     const tam=taMarksDx();
-    body += `<div style="margin-top:20px">${ph==='ddx'?'<p class="prompt">助教正在帶著排鑑別：上調（變可能）、持平、下調（變不可能）。跟著聽就好。</p>':`<h3 style="font-size:15px;margin:0 0 4px">教案的判斷</h3>`}`
+    body += `<div style="margin-top:20px">${ph==='ddx'?'<p class="prompt">助教正在帶著排鑑別：上調（變可能）、持平、下調（變不可能）。跟著聽就好。</p>':`${impHTML(impAt(i))}<h3 style="font-size:15px;margin:0 0 4px">教案的判斷</h3>`}`
       + treeOrder(list, d=>prev[d]?.s||'open').map(({d,hd,depth})=>{
         if(hd) return `<div class="subhd">${esc(hd)}</div>`;
         const mine=tam[d], v=verdict[d], rc='';
