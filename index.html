@@ -125,6 +125,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .chip.out{color:var(--out);border-color:var(--out)} .chip.lead{background:var(--lead);border-color:var(--lead);color:var(--sheet);font-weight:700}
 .dx.out .dxname{color:var(--out);text-decoration:line-through}
 .dx.changed{background:none}
+.mine{margin-left:auto;font-size:13px;color:var(--muted);white-space:nowrap}
+.mine.diff{color:var(--ink);font-weight:700}
+.mine+.chip{margin-left:10px}
 .chip{border:0!important;background:none!important;padding:0!important;font-weight:700}
 .chip.lead{color:var(--lead)!important}
 .new{display:none}
@@ -610,8 +613,8 @@ const TREE = [
   {d:'prerenal'},
   {d:'intrinsic', subs:[
     {label:'腎絲球', ds:['gn']},
-    {label:'血管・溶血（血栓性微血管病變・微血栓）', ds:['pe','hellp','ttp','ahus','stechus','aps','sle','dic','aiha']},
-    {label:'腎小管・其他', ds:['aflp']}]},
+    {label:'腎血管（含溶血、微血栓；先不細分 MAHA／AIHA）', ds:['pe','hellp','ttp','ahus','stechus','aps','sle','dic','aiha']},
+    {label:'腎小管（ATN 等）', ds:['aflp']}]},
   {d:'postrenal'}];
 const RANK = {lead:0, up:1, open:2, keep:2, down:3, out:4};
 const ORDER = Object.keys(DX);
@@ -707,13 +710,12 @@ function renderTA(){
       const cls=['u']; if(keyed) cls.push('key');
       const showA = sec.assoc && (ph==='reveal' || ((ph==='ask'||ph==='ddx') && shown.has(u.id)));
       const tg=sec.layout==='prose'?'span role="button"':'button', te=sec.layout==='prose'?'span':'button';
-      return `<${tg} class="${cls.join(' ')}" data-act="${(ph==='ask'||((sec.assoc||sec.info)&&ph==='ddx'))?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c&&ph==='clue'?`<span class="cnt">${c}</span>`:''}${showA?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&shown.has(u.id)?infoHTML(u):''}${figHTML(u)}</${te}>`;
+      return `<${tg} class="${cls.join(' ')}" data-act="${(ph==='ask'||((sec.assoc||sec.info)&&ph==='ddx'))?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c&&(ph==='clue'||(sec.assoc&&ph==='ask'))?`<span class="cnt">${c}</span>`:''}${showA?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&shown.has(u.id)?infoHTML(u):''}${figHTML(u)}</${te}>`;
     }));
     body = `<p class="prompt">${prompt}</p>${body}`;
   }
   if((i===0||sec.qr) && ph==='ask') body += `<div class="qrbox"><div id="qr" class="qr"></div><div><b>掃描加入，用手機一起作答</b><br><span class="muted">${SITE_URL.replace('https://','')}</span></div></div>`;
   if(ph==='reveal') body += analysisHTML(sec);
-  body += cardsHTML(sec,'p:');
   const nextLabel = (()=>{ const ps=phasesOf(i), k=ps.indexOf(ph); if(k<ps.length-1) return PH[ps[k+1]]+' →'; return i<last?'下一段 →':''; })();
   return `
   <header class="bar">
@@ -731,6 +733,7 @@ function renderTA(){
   <main class="stage">
     <section class="sheet">
       <div class="sec-head"><span class="sec-no">${esc(sec.no)}</span><h1 class="sec-title">${esc(sec.title)}</h1></div>
+      ${cardsHTML(sec,'p:')}
       ${body}
       <div class="selfnav"><button class="btn" data-act="prev">← 上一步</button>${nextLabel?`<button class="btn primary" data-act="next">${nextLabel}</button>`:''}</div>
     </section>
@@ -753,8 +756,9 @@ function boardHTML(i, ph, a){
     const mk=tam[d];
     const bars = ph!=='reveal' ? `<span class="vbtns" style="margin:6px 0 0">${['u','k','d'].map(x=>canMark?`<button class="${x} ${mk===x?'on':''}" data-act="tadx" data-dx="${d}" data-v="${x}">${VLAB[x]}</button>`:(mk===x?`<button class="${x} on" disabled>${VLAB[x]}</button>`:'')).join('')}</span>`:'';
     const isNew = DX[d].intro===i && i>0;
+    const mineLbl = reveal && mk ? `<span class="mine${VOTE_OF[st]!==mk?' diff':''}">課堂 ${VLAB[mk]}${VOTE_OF[st]!==mk?'　≠ 教案':''}</span>` : '';
     return `<div class="dx ${depth?'child':''}${st==='out'?'out':''} ${changed?'changed':''}">
-      <div class="dx-top"><button class="dxname" data-act="open" data-k="d:${d}">${esc(DX[d].name)}</button>${isNew?'<span class="new">新</span>':''}<span class="chip ${st}">${ST[st]}</span></div>
+      <div class="dx-top"><button class="dxname" data-act="open" data-k="d:${d}">${esc(DX[d].name)}</button>${isNew?'<span class="new">新</span>':''}${mineLbl}<span class="chip ${st}">${mineLbl?'教案 ':''}${ST[st]}</span></div>
       ${bars}
       ${changed?`<p class="why">${srcTag(v)}${esc(v.why)}</p>`:''}
       ${S.dxOpen.has(d)?`<p class="dxcard">${esc(DX[d].card)}</p>`:''}
@@ -773,21 +777,18 @@ function renderST(){
   const i=S.live.sec, sec=SECTIONS[i], ph=S.live.phase;
   const picks=new Set(S.mine.picks[sec.id]||[]);
   let body=statementHTML(sec, ph);
-  if(sec.units && ph!=='want'){
+  if(sec.units && ph!=='want' && !(ph==='reveal' && hasDx(sec))){
     const F=sec.abn?'ab':'key';
-    const hits=sec.units.filter(u=>u[F]&&picks.has(u.id)).length, keys=sec.units.filter(u=>u[F]).length;
     const clued=phasesOf(i).includes('clue');
-    if(ph==='reveal' && clued) body+= `<p class="score">命中 <b>${hits}</b> ／ ${keys}${sec.abn?' 項異常':' 句關鍵'}　<span class="muted">✓ 命中　漏　多點</span></p>`;
     body += unitsWrap(sec, eachUnit(sec, u=>{
       const p=picks.has(u.id); let cls='u';
       if(ph==='reveal' && !clued) cls+= u.key && !sec.assoc ? ' key' : '';
-      else if(ph==='reveal') cls+= u[F] ? (p?' hit':' miss') : (p?' extra':'');
       else if(p) cls+=' pick';
       const sh=(S.shown[sec.id]||new Set()).has(u.id);
       const act = ((sec.assoc||sec.info) && ph==='ddx') ? 'reveal1' : (ph==='clue'||(sec.assoc&&ph==='ask')) ? 'pick' : 'pick';
       const live = ph==='clue' || (sec.assoc && (ph==='ask'||ph==='ddx')) || (sec.info && ph==='ddx');
       const tg=sec.layout==='prose'?'span role="button"':'button', te=sec.layout==='prose'?'span':'button';
-      return `<${tg} class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${ph==='reveal'&&clued?(u[F]?(p?'<span class="mk">✓</span>':'<span class="mk">漏</span>'):(p?'<span class="mk">多點</span>':'')):''}${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&sh?infoHTML(u):''}${figHTML(u)}</${te}>`;
+      return `<${tg} class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&sh?infoHTML(u):''}${figHTML(u)}</${te}>`;
     }));
   }
   if(hasDx(sec) && (ph==='ddx' || (ph==='reveal' && sec.units))){
@@ -800,11 +801,10 @@ function renderST(){
         const mine=tam[d], v=verdict[d], rc='';
         const btns = ph==='ddx' ? (mine?`<span class="vbtns"><button class="${mine} on" disabled>${VLAB[mine]}</button></span>`:'<span class="vbtns muted" style="font-size:13px">助教還沒排</span>') : `<span class="chip ${v?v.s:'open'}">${v?ST[v.s]:'持平'}</span>`;
         const cmp = ph==='reveal' && v ? `<p class="why">${srcTag(v)}${esc(v.why)}</p>` : '';
-        return `<div class="vote ${depth?'child':''}${rc}"><div class="vote-top"><button class="dxname" data-act="open" data-k="d:${d}">${esc(DX[d].name)}</button>${DX[d].intro===i&&i>0?'<span class="new">新</span>':''}${btns}</div>${cmp}${S.dxOpen.has(d)?`<p class="dxcard">${esc(DX[d].card)}</p>`:''}</div>`;
+        return `<div class="vote ${depth?'child':''}${rc}"><div class="vote-top"><button class="cardbtn${S.dxOpen.has(d)?' on':''}" data-act="open" data-k="d:${d}">${esc(DX[d].name)}</button>${DX[d].intro===i&&i>0?'<span class="new">新</span>':''}${btns}</div>${cmp}${S.dxOpen.has(d)?`<p class="dxcard">${esc(DX[d].card)}</p>`:''}</div>`;
       }).join('') + '</div>';
   }
   if(ph==='reveal') body += analysisHTML(sec) + (hasDx(sec)?'':mapHTML(sec));
-  body += cardsHTML(sec,'p:');
   const ids=secsOf(courseOf(i));
   const nav = S.follow ? '' : `<div class="selfnav"><button class="btn" data-act="prev">← 上一步</button><button class="btn primary" data-act="next">下一步 →</button></div>`;
   const status = S.follow ? `<span class="pill"><span class="dot ok"></span>跟著助教進度</span>` : `<span class="pill"><span class="dot"></span>自己瀏覽</span>`;
@@ -815,6 +815,7 @@ function renderST(){
     <section class="sheet">
       <span class="phase-tag">${PH[ph]}</span>
       <div class="sec-head"><span class="sec-no">${esc(sec.no)}</span><h1 class="sec-title">${esc(sec.title)}</h1></div>
+      ${cardsHTML(sec,'p:')}
       <p class="prompt">${esc(ph==='ask'&&sec.askHint?sec.askHint:(ph==='clue'&&sec.abn?'點出你覺得異常的項目（可複選）':PH_HINT[ph]+(ph==='ddx'&&sec.info?'　點檢驗項目可看正常值與用途。':'')))}</p>
       ${body}
       ${nav}
