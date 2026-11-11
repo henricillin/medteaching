@@ -147,6 +147,26 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .imp ol{margin:0;padding-left:1.4em;font-weight:700;line-height:1.6}
 .imp .note{font-size:13px;color:var(--muted);font-weight:400;margin:4px 0 0;padding:0;background:none;border:0}
 .listhd{font-size:13px;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:6px 0 2px}
+/* 分層看板：字級與顏色隨可能性遞減；只有「最像」用琥珀色 */
+.tier{margin-top:12px}
+.tierhd{font-size:13px;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0 0 2px}
+.t-top .tierhd,.arw{color:var(--heat-ink)}
+.arw{font-weight:700;font-size:18px;line-height:1;margin-right:-2px}
+.arw.dn{color:var(--down);font-size:14px}
+.t-top .dxname{font-size:20px;font-weight:700}
+.t-top .why{color:var(--ink)}
+.t-low .dxname{font-size:14px;color:var(--down)}
+.t-low .why{color:var(--down)}
+.gtag{font-size:13px;color:var(--muted);white-space:nowrap}
+.line{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px}
+.sep{color:var(--muted)}
+.outgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px;border-top:1px solid var(--rule);padding-top:4px}
+.outgrid .dx{border-top:0;padding:3px 0}
+.outgrid .dxname{font-size:13px;color:var(--out);text-decoration:line-through;cursor:pointer}
+.outgrid .why{margin:0;color:var(--out)}
+.gone{display:block;width:100%;border:0;border-top:1px solid var(--rule);background:none;padding:8px 0 4px;margin-top:10px;font-size:13px;color:var(--out);text-align:left;line-height:1.6}
+.gone:hover{color:var(--ink)}
+.diffs{font-size:13px;margin:10px 0 0;padding:6px 10px;border-left:3px solid var(--heat);background:var(--paper)}
 
 /* student */
 .phone{max-width:600px;margin:0 auto}
@@ -645,6 +665,55 @@ function treeOrder(ids, stOf){
   }
   return out;
 }
+/* 看板分層（第 3 段起；第 1–2 段只有三大類，維持樹狀）：最像（lead/up）→ 還在（open/keep）→ 較不像（down）→ 排除（out）。
+   只有「排除」的下一段起撤掉，收成一行可點開；下調的留著，只是變小。箭頭＋理由只標這一段有變動的診斷。 */
+const useTiers = i => i>=2;
+const TIER_OF = {lead:'top', up:'top', open:'mid', keep:'mid', down:'low', out:'out'};
+const TIER_LAB = {top:'最像', mid:'還在', low:'較不像', out:'這一段排除'};
+const MARK_TIER = {u:'top', d:'low'};
+const GROUP_OF = {}; TREE.forEach(t=>(t.subs||[]).forEach(s=>s.ds.forEach(d=>GROUP_OF[d]=s.label.replace(/（.*$/,''))));
+const byRank = stOf => (a,b)=>RANK[stOf(a)]-RANK[stOf(b)] || ORDER.indexOf(a)-ORDER.indexOf(b);
+const gtag = d => GROUP_OF[d] ? `<span class="gtag">${esc(GROUP_OF[d])}</span>` : '';
+/* 併成一行、排除格用短名：「紅斑性狼瘡（SLE）」→ SLE；「TTP（血栓性…）」→ TTP；「典型 HUS（STEC-HUS）」→ 典型 HUS */
+const shortName = d => { const m=DX[d].name.match(/^(.*?)（(.*)）$/); if(!m) return DX[d].name; return /[A-Za-z]/.test(m[1]) ? m[1] : /[A-Za-z]/.test(m[2]) ? m[2] : m[1]; };
+const dxBtn = (d, short) => `<button class="dxname" data-act="open" data-k="d:${d}">${esc(short?shortName(d):DX[d].name)}</button>`;
+const cardsOf = ds => ds.filter(d=>S.dxOpen.has(d)).map(d=>`<p class="dxcard">${esc(DX[d].card)}</p>`).join('');
+const arrow = s => s==='up'||s==='lead' ? '<span class="arw">↑</span>' : s==='down' ? '<span class="arw dn">↓</span>' : '';
+const tierBox = (t, body, n) => body ? `<div class="tier t-${t}"><p class="tierhd">${TIER_LAB[t]}${n?` ${n} 個`:''}</p>${body}</div>` : '';
+/* 之前段落已排除的：一行，可點開看各自的決定性數據 */
+function goneHTML(gone, prev){
+  if(!gone.length) return '';
+  const open=S.dxOpen.has('__gone');
+  return `<button class="gone" data-act="open" data-k="d:__gone">已排除 ${gone.length} 個${open?'':'：'+gone.map(d=>esc(shortName(d))).join('、')}　${open?'收合':'展開'}</button>`
+    + (open ? `<div class="outgrid">${gone.map(d=>`<div class="dx"><s class="dxname">${esc(shortName(d))}</s><p class="why">${esc(prev[d].why)}</p></div>`).join('')}</div>` : '');
+}
+/* 討論中（揭曉前）：每個診斷一列（助教要按上調／持平／下調）；助教按了上調、下調，那一列就移到對應的層 */
+function tierLiveHTML(i, live, prev, tam, rowFn){
+  const st=d=>prev[d]?.s||'open', tierOf=d=>MARK_TIER[tam[d]] || TIER_OF[st(d)];
+  const sorted=[...live].sort(byRank(st));
+  return ['top','mid','low'].map(t=>tierBox(t, sorted.filter(d=>tierOf(d)===t).map(rowFn).join(''))).join('');
+}
+/* 揭曉：依這一段結束時的判斷分層；還在、較不像的沒變動就併成一行 */
+function tierRevealHTML(i, live){
+  const cur=statusAfter(i), v=SECTIONS[i].verdict||{}, st=d=>cur[d]?.s||'open';
+  const of=t=>live.filter(d=>TIER_OF[st(d)]===t).sort(byRank(st));
+  const fl=d=>`data-fl="${i}:${d}"`;
+  const top = of('top').map(d=>`<div class="dx" ${fl(d)}><div class="dx-top">${arrow(v[d]?.s)}${dxBtn(d)}${gtag(d)}${st(d)==='lead'?'<span class="chip lead">最可能</span>':''}</div>${v[d]?`<p class="why">${srcTag(v[d])}${esc(v[d].why)}</p>`:''}${cardsOf([d])}</div>`).join('');
+  const groups = ds => { const g=new Map(); for(const d of ds){ const k=v[d]?v[d].why:''; if(!g.has(k)) g.set(k,{ds:[],x:v[d]}); g.get(k).ds.push(d); } return [...g].sort((a,b)=>(a[0]==='')-(b[0]==='')); };
+  const mid = groups(of('mid')).map(([why,{ds,x}])=>`<div class="dx"><div class="line">${ds.map(d=>`<span ${fl(d)}>${dxBtn(d,ds.length>1)}</span>`).join('<span class="sep">·</span>')}</div>${why?`<p class="why">${srcTag(x)}${esc(why)}</p>`:''}${cardsOf(ds)}</div>`).join('');
+  const low = of('low'), lowNew = low.filter(d=>v[d]), lowOld = low.filter(d=>!v[d]);
+  const lowH = lowNew.map(d=>`<div class="dx" ${fl(d)}><div class="dx-top">${arrow('down')}${dxBtn(d)}${gtag(d)}</div><p class="why">${srcTag(v[d])}${esc(v[d].why)}</p>${cardsOf([d])}</div>`).join('')
+    + (lowOld.length ? `<div class="dx"><div class="line">${lowOld.map(d=>`<span ${fl(d)}>${dxBtn(d,true)}</span>`).join('<span class="sep">·</span>')}<span class="gtag">前段已下調</span></div>${cardsOf(lowOld)}</div>` : '');
+  const out = of('out');
+  const outH = out.length ? `<div class="outgrid">${out.map(d=>`<div class="dx" ${fl(d)}><s class="dxname" data-act="open" data-k="d:${d}">${esc(shortName(d))}</s><p class="why">${v[d]?srcTag(v[d])+esc(v[d].why):''}</p></div>`).join('')}</div>${cardsOf(out)}` : '';
+  return tierBox('top',top) + tierBox('mid',mid) + tierBox('low',lowH) + tierBox('out',outH,out.length);
+}
+/* 揭曉時，課堂（助教在排鑑別階段按的）和教案不同的診斷 */
+function diffHTML(i, live, tam){
+  const v=SECTIONS[i].verdict||{};
+  const ds=live.filter(d=>tam[d] && tam[d]!==(v[d]?VOTE_OF[v[d].s]:'k'));
+  return ds.length ? `<p class="diffs">課堂和教案不同：${ds.map(d=>`${esc(shortName(d))}（課堂 ${VLAB[tam[d]]}，教案 ${v[d]?ST[v[d].s]:'持平'}）`).join('、')}</p>` : '';
+}
 const validLive = d => d && Number.isInteger(d.sec) && d.sec>=0 && d.sec<SECTIONS.length && phasesOf(d.sec).includes(d.phase);
 
 /* ---------- state ---------- */
@@ -765,6 +834,20 @@ function boardHTML(i, ph, a){
     if(before==='out'){ gone.push(d); continue; }
     live.push(d);
   }
+  if(useTiers(i)){
+    const row = d => {
+      const mk=tam[d], st=prev[d]?.s||'open';
+      const bars = `<span class="vbtns" style="margin:6px 0 0">${['u','k','d'].map(x=>canMark?`<button class="${x} ${mk===x?'on':''}" data-act="tadx" data-dx="${d}" data-v="${x}">${VLAB[x]}</button>`:(mk===x?`<button class="${x} on" disabled>${VLAB[x]}</button>`:'')).join('')}</span>`;
+      return `<div class="dx" data-fl="${i}:${d}"><div class="dx-top">${dxBtn(d)}${gtag(d)}${st==='lead'?'<span class="chip lead">最可能</span>':''}</div>${bars}${cardsOf([d])}</div>`;
+    };
+    return `<aside class="board">
+    <h2>鑑別診斷看板</h2>
+    <p class="sub">${reveal?'箭頭與理由＝這一段改變了判斷':(canMark?'邊討論邊排：按上調、下調，那一列會移到對應的層；學生手機在「排鑑別」階段會同步':'上一段結束時的判斷')}。點病名看說明。</p>
+    ${impHTML(impAt(reveal?i:i-1))}
+    ${reveal ? tierRevealHTML(i, live) + diffHTML(i, live, tam) : tierLiveHTML(i, live, prev, tam, row)}
+    ${goneHTML(gone, prev)}
+  </aside>`;
+  }
   const rows = treeOrder(live, d=>(reveal?cur:prev)[d]?.s||'open').map(({d,hd,depth})=>{
     if(hd) return `<div class="subhd">${esc(hd)}</div>`;
     const st=(reveal?cur:prev)[d]?.s||'open', v=verdict[d], changed=reveal&&v;
@@ -811,6 +894,13 @@ function renderST(){
     const prev=statusAfter(i-1), verdict=sec.verdict||{};
     const list=dxAt(i).filter(d=>(prev[d]?.s)!=='out');
     const tam=taMarksDx();
+    if(useTiers(i)){
+      const gone=dxAt(i).filter(d=>(prev[d]?.s)==='out');
+      const row = d => `<div class="dx" data-fl="${i}:${d}"><div class="dx-top">${dxBtn(d)}${gtag(d)}${tam[d]?`<span class="vbtns"><button class="${tam[d]} on" disabled>${VLAB[tam[d]]}</button></span>`:'<span class="vbtns muted" style="font-size:13px">助教還沒排</span>'}</div>${cardsOf([d])}</div>`;
+      body += `<div style="margin-top:20px">${ph==='ddx'
+        ? '<p class="prompt">助教正在帶著排鑑別：上調（變可能）、持平、下調（變不可能）。跟著聽就好。</p>' + tierLiveHTML(i, list, prev, tam, row)
+        : impHTML(impAt(i)) + '<h3 style="font-size:15px;margin:0 0 4px">教案的判斷</h3>' + tierRevealHTML(i, list) + diffHTML(i, list, tam)}${goneHTML(gone, prev)}</div>`;
+    } else
     body += `<div style="margin-top:20px">${ph==='ddx'?'<p class="prompt">助教正在帶著排鑑別：上調（變可能）、持平、下調（變不可能）。跟著聽就好。</p>':`${impHTML(impAt(i))}<h3 style="font-size:15px;margin:0 0 4px">教案的判斷</h3>`}`
       + treeOrder(list, d=>prev[d]?.s||'open').map(({d,hd,depth})=>{
         if(hd) return `<div class="subhd">${esc(hd)}</div>`;
@@ -845,7 +935,14 @@ function renderST(){
 let raf=0;
 const SITE_URL=location.origin+location.pathname;
 function drawQR(){ const el=document.getElementById('qr'); if(!el||!window.QRCode) return; el.innerHTML=''; try{ new QRCode(el,{text:SITE_URL,width:168,height:168,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){} }
-function render(){ raf=0; document.getElementById('app').innerHTML = (S.role==='ta'&&!S.preview) ? renderTA() : renderST(); drawQR(); }
+/* 看板上的診斷換層時，從原位置滑到新位置（FLIP） */
+const MOTION = matchMedia('(prefers-reduced-motion:no-preference)');
+function render(){
+  raf=0;
+  const was=new Map(); if(MOTION.matches) document.querySelectorAll('[data-fl]').forEach(e=>was.set(e.dataset.fl, e.getBoundingClientRect().top));
+  document.getElementById('app').innerHTML = (S.role==='ta'&&!S.preview) ? renderTA() : renderST(); drawQR();
+  if(was.size) document.querySelectorAll('[data-fl]').forEach(e=>{ const t=was.get(e.dataset.fl); if(t==null) return; const dy=t-e.getBoundingClientRect().top; if(Math.abs(dy)>4) e.animate([{transform:`translateY(${dy}px)`},{transform:'none'}],{duration:400,easing:'cubic-bezier(.2,.8,.2,1)'}); });
+}
 window.addEventListener('load',()=>drawQR());
 function schedule(){ if(!raf) raf=requestAnimationFrame(render); }
 
