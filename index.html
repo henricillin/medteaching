@@ -70,7 +70,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .grp{font-size:13px;letter-spacing:.12em;color:var(--muted);margin:12px 0 2px;font-weight:700}
 .grp:first-child{margin-top:0}
 .u{position:relative;border:1.5px solid transparent;border-radius:6px;padding:1px 6px;background:transparent;text-align:left;line-height:inherit;font-size:inherit}
-.units.prose .u{display:inline;-webkit-box-decoration-break:clone;box-decoration-break:clone;margin-right:4px}
+.units.prose .u{cursor:pointer;padding:0 3px;border-radius:4px;display:inline;-webkit-box-decoration-break:clone;box-decoration-break:clone;margin-right:4px}
 .units.list .u{display:flex;align-items:baseline;gap:10px;font-size:16px;padding:6px 10px;border-color:var(--rule)}
 .units.list .u .lab{min-width:0}
 .units.list.data .u{font-family:var(--f-data);font-size:16px}
@@ -124,10 +124,12 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .chip.up{color:var(--up);border-color:var(--up)} .chip.down{color:var(--down);border-color:var(--down)}
 .chip.out{color:var(--out);border-color:var(--out)} .chip.lead{background:var(--lead);border-color:var(--lead);color:var(--sheet);font-weight:700}
 .dx.out .dxname{color:var(--out);text-decoration:line-through}
-.dx.changed{background:var(--key-soft);margin:0 -8px;padding:9px 8px}
+.dx.changed{background:none}
+.chip{border:0!important;background:none!important;padding:0!important;font-weight:700}
+.chip.lead{color:var(--lead)!important}
+.new{display:none}
 .subhd{font-size:13px;letter-spacing:.08em;color:var(--muted);font-weight:700;padding:8px 0 2px 18px;border-top:1px solid var(--rule)}
 .dx.child,.vote.child{margin-left:18px;padding-left:10px;border-left:2px solid var(--rule);border-top:0}
-.dx.child.changed{margin-left:18px;margin-right:-8px;padding-left:10px}
 .why{font-size:13px;color:var(--muted);margin:4px 0 0;line-height:1.55}
 .dx.changed .why{color:var(--ink)}
 .dxcard{font-size:13px;margin:6px 0 0;padding:8px 10px;border-left:3px solid var(--key);background:var(--paper);border-radius:0 6px 6px 0}
@@ -704,7 +706,8 @@ function renderTA(){
       const keyed = ph==='reveal' && (sec.abn ? u.ab : (u.key && !sec.assoc));
       const cls=['u']; if(keyed) cls.push('key');
       const showA = sec.assoc && (ph==='reveal' || ((ph==='ask'||ph==='ddx') && shown.has(u.id)));
-      return `<button class="${cls.join(' ')}" data-act="${(ph==='ask'||((sec.assoc||sec.info)&&ph==='ddx'))?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c&&ph==='clue'?`<span class="cnt">${c}</span>`:''}${showA?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&shown.has(u.id)?infoHTML(u):''}${figHTML(u)}</button>`;
+      const tg=sec.layout==='prose'?'span role="button"':'button', te=sec.layout==='prose'?'span':'button';
+      return `<${tg} class="${cls.join(' ')}" data-act="${(ph==='ask'||((sec.assoc||sec.info)&&ph==='ddx'))?'reveal1':'mark'}" data-u="${u.id}" style="background:color-mix(in srgb,var(--heat) ${pct}%,transparent)"><span class="lab">${esc(u.t)}</span>${c&&ph==='clue'?`<span class="cnt">${c}</span>`:''}${showA?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&shown.has(u.id)?infoHTML(u):''}${figHTML(u)}</${te}>`;
     }));
     body = `<p class="prompt">${prompt}</p>${body}`;
   }
@@ -783,7 +786,8 @@ function renderST(){
       const sh=(S.shown[sec.id]||new Set()).has(u.id);
       const act = ((sec.assoc||sec.info) && ph==='ddx') ? 'reveal1' : (ph==='clue'||(sec.assoc&&ph==='ask')) ? 'pick' : 'pick';
       const live = ph==='clue' || (sec.assoc && (ph==='ask'||ph==='ddx')) || (sec.info && ph==='ddx');
-      return `<button class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${ph==='reveal'&&clued?(u[F]?(p?'<span class="mk">✓</span>':'<span class="mk">漏</span>'):(p?'<span class="mk">多點</span>':'')):''}${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&sh?infoHTML(u):''}${figHTML(u)}</button>`;
+      const tg=sec.layout==='prose'?'span role="button"':'button', te=sec.layout==='prose'?'span':'button';
+      return `<${tg} class="${cls}" data-act="${act}" data-u="${u.id}" ${live?'':'aria-disabled="true"'}><span class="lab">${esc(u.t)}</span>${ph==='reveal'&&clued?(u[F]?(p?'<span class="mk">✓</span>':'<span class="mk">漏</span>'):(p?'<span class="mk">多點</span>':'')):''}${sec.assoc&&(ph==='reveal'||(ph==='ddx'&&sh))?assocHTML(u):''}${sec.info&&(ph==='ddx'||ph==='reveal')&&sh?infoHTML(u):''}${figHTML(u)}</${te}>`;
     }));
   }
   if(hasDx(sec) && (ph==='ddx' || (ph==='reveal' && sec.units))){
